@@ -22,15 +22,14 @@
 
 %%
 
-program :   
+program : %empty
         | decls ";" stmts
 ;
 
-decls : 
+decls : %empty
         | decls ";" decl ";"
 ;
-dec :
-        | VAR IDENT ":" dtype
+decl :   VAR IDENT ":" dtype
         | VAR IDENT ":" dtype "=" exp
 ;
 dtype : D_INT 
@@ -38,17 +37,11 @@ dtype : D_INT
         | D_STRING
         | D_BOOL
 ;
-val :    INT
-        | FLOAT
-        | STRING
-        | BOOL
-;
 
-stmts : 
+stmts : %empty
         | stmts ";" stmt ";"
 ;
-stmt : 
-        | read
+stmt :   read
         | print
         | cond
         | loop
@@ -61,38 +54,38 @@ loop : WHILE "(" exp ")" "{" stmts "}"
 ;
 cond : IF "(" exp ")" "{" stmts "}" extend
 ;
-extend : 
+extend : %empty
         | ELSE "{" stmts "}"
         | ELSE IF "(" exp ")" "{" stmts "}" extend
 ;
-exp : e "||" e {$$ = $1 || $3;} 
-    | e "&&" e {$$ = $1 && $3;}
+exp : exp "||" f 
+    | exp "&&" f 
     | f 
 ;
-f : f "==" f {$$ = $1 == $3;}
-    | f "!=" f ($$ = $1 != $3;)
+f : f "==" g 
+    | f "!=" g 
     | g
 ;
-g : g ">=" g {$$ = $1 >= $3;}
-    | g "<=" g {$$ = $1 >= $3;}
-    | g ">" g {$$ = $1 > $3;}
-    | g "<" g {$$ = $1 < $3;}
+g : g ">=" h 
+    | g "<=" h 
+    | g ">" h
+    | g "<" h 
     | h
 ;
-h : h "+" h {$$ = $1 + $3;}
-    | h "-" h {$$ = $1 + $3;}
+h : h "+" i 
+    | h "-" i 
     | i
 ;
-i : i "*" i {$$ = $1 * $3;}
-    | i "/" i {$$ = $1 / $3;}
+i : i "*" j 
+    | i "/" j 
     | j
 ;
-j : "-"j {$$ = -$1;}
-    | "!"j {$$ = !$1;}
-    | "("exp")" {$$ = $2}
+j : "-"j 
+    | "!"j 
+    | "("exp")" 
     | k
 ;
-k : ID 
+k : IDENT 
     | INT
     | FLOAT
     | STRING
