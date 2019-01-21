@@ -59,7 +59,28 @@ extern int yydebug;
     READ = 269,
     IF = 270,
     ELSE = 271,
-    WHILE = 272
+    WHILE = 272,
+    ASS = 273,
+    NOT = 274,
+    ADD = 275,
+    SUB = 276,
+    MUL = 277,
+    DIV = 278,
+    EQ = 279,
+    NEQ = 280,
+    GEQ = 281,
+    LEQ = 282,
+    GT = 283,
+    LT = 284,
+    OR = 285,
+    AND = 286,
+    CO = 287,
+    CC = 288,
+    FO = 289,
+    FC = 290,
+    COLON = 291,
+    SCOLON = 292,
+    ERR = 293
   };
 #endif
 

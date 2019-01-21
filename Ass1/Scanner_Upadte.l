@@ -9,7 +9,11 @@
 %{
 #include<stdio.h>
 #include<stdlib.h>
+#include "Parser.tab.h"
 %}
+
+
+%option yylineno
 
 %%
 
@@ -42,53 +46,53 @@
                 return READ;}
 
 "!"         {printf("! ");
-                return "!"}
+                return NOT;}
 "="         {printf("= ");
-                return "=";}
+                return ASS;}
 
 "+"         {printf("+ ");
-                return "+";}
+                return ADD;}
 "-"         {printf("- ");
-                return "-";}
+                return SUB;}
 "*"         {printf("* ");
-                return "*";}
+                return MUL;}
 "/"         {printf("/ ");
-                reutrn "/";}
+                return DIV;}
 
 ">="        {printf(">= ");
-                return ">=";}
+                return GEQ;}
 "<="        {printf("<= ");
-                return "<=";}
+                return LEQ;}
 ">"         {printf("> ");
-                return ">";}
+                return GT;}
 "<"         {printf("< ");
-                return "<";}
+                return LT;}
 
 "=="        {printf("== ");
-                return "==";}
+                return EQ;}
 "!="        {printf("!= ");
-                return "!=";}
+                return NEQ;}
 
 "&&"        {printf("&& ");
-                return "&&";}
+                return AND;}
 "||"        {printf("|| ");
-                retrun "||";}
+                return OR;}
 
 "("         {printf("OPEN_P ");
-                return "(";}
+                return CO;}
 ")"         {printf("CLOSE_P ");
-                return ")";}
+                return CC;}
 
 "{"         {printf("OPEN_C ");
-                return "{";}
+                return FO;}
 "}"         {printf("CLOSE_C ");
-                return "}";}
+                return FC;}
 
 ":"         {printf(": ");
-                return ":";}
+                return COLON;}
 
 ";"         {printf("CE ## ");
-                return ";";}
+                return SCOLON;}
 
 
 
@@ -116,9 +120,10 @@
 
 %%
 
-int main () {
+int yyerror (char const *s) {
 
-    yylex();
+    printf("Error in line %d\n", yylineno);
+    fprintf (stderr, "%s\n", s);
 
-    return 0;
+    return 1;
 }

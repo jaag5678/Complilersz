@@ -1,0 +1,21 @@
+var x : int;
+var d : int = 0;
+
+read (n);
+var c : string;
+
+
+
+while(n) {
+    read (c);
+    if(c == "D") {
+        d = d + 1;
+    }
+    else {
+        d = d - 1;
+    }
+
+    print(d);
+}
+
+print (d);
