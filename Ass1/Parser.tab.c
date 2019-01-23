@@ -65,8 +65,11 @@
 #line 3 "Parser.y" /* yacc.c:339  */
 
     #include<stdio.h>
+    #include<string.h>
 
-#line 70 "Parser.tab.c" /* yacc.c:339  */
+    extern int g;
+
+#line 73 "Parser.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -156,7 +159,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 160 "Parser.tab.c" /* yacc.c:358  */
+#line 163 "Parser.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -457,11 +460,11 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint8 yyrline[] =
 {
-       0,    67,    67,    68,    70,    71,    72,    73,    74,    77,
-      78,    79,    81,    82,    83,    84,    88,    90,    93,    95,
-      97,    98,    99,   101,   102,   103,   105,   106,   107,   109,
-     110,   111,   112,   113,   115,   116,   117,   119,   120,   121,
-     123,   124,   125,   126,   128,   129,   130,   131,   132
+       0,    70,    70,    71,    73,    74,    75,    76,    77,    80,
+      81,    82,    84,    85,    86,    87,    90,    92,    95,    97,
+      99,   100,   101,   103,   104,   105,   107,   108,   109,   111,
+     112,   113,   114,   115,   117,   118,   119,   121,   122,   123,
+     125,   126,   127,   128,   130,   131,   132,   133,   134
 };
 #endif
 
@@ -1299,7 +1302,7 @@ yyreduce:
   switch (yyn)
     {
       
-#line 1303 "Parser.tab.c" /* yacc.c:1646  */
+#line 1306 "Parser.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1527,12 +1530,37 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 135 "Parser.y" /* yacc.c:1906  */
+#line 137 "Parser.y" /* yacc.c:1906  */
 
 
-int main () {
+int main (int argc, char *argv[]) {
 
-    yyparse();
+
+    if(argc < 2) 
+        printf("Invalid for of running lex / parser. Give type \n");    
+    else if(!strcmp(argv[1], "scan")) {
+        int x;
+        while(x = yylex() ) {
+            if(x == ERR) {
+                return 1;
+            }
+        }
+        if(x == 0) {
+                printf("OK\n");
+                return 0;
+        }
+
+    }
+    else if(!strcmp(argv[1], "token")) {
+        g = 1;
+        while(yylex());
+    }
+    else if(!strcmp(argv[1], "parse")) {
+        yyparse();
+        printf("OK\n");
+    }
+
+        
 
     return 0;
 }

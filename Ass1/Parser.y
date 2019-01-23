@@ -2,6 +2,9 @@
 
 %{
     #include<stdio.h>
+    #include<string.h>
+
+    extern int g;
 %}
 
 %define parse.error verbose
@@ -84,7 +87,6 @@ dtype : D_INT
         | D_BOOL
 ;
 
-
 read : READ CO IDENT CC SCOLON
 ;       
 print : PRINT CO exp CC SCOLON
@@ -134,9 +136,34 @@ k : IDENT
 
 %%
 
-int main () {
+int main (int argc, char *argv[]) {
 
-    yyparse();
+
+    if(argc < 2) 
+        printf("Invalid for of running lex / parser. Give type \n");    
+    else if(!strcmp(argv[1], "scan")) {
+        int x;
+        while(x = yylex() ) {
+            if(x == ERR) {
+                return 1;
+            }
+        }
+        if(x == 0) {
+                printf("OK\n");
+                return 0;
+        }
+
+    }
+    else if(!strcmp(argv[1], "token")) {
+        g = 1;
+        while(yylex());
+    }
+    else if(!strcmp(argv[1], "parse")) {
+        yyparse();
+        printf("OK\n");
+    }
+
+        
 
     return 0;
 }

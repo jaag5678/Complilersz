@@ -10,119 +10,125 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include "Parser.tab.h"
+
+int g = 0;
 %}
 
 
 %option yylineno
+%option verbose
 
 %%
 
-"//".*                {printf("COMMENT "); }
+"//".*                {if(g) printf("tCOMMENT "); }
 [ \t]+                  { }
-[\n]                    {printf("EOL \n");}
+[\n]                    {if(g) printf("tEOL \n");}
 
-"var"       {printf("VAR_DEC ");
+"var"       {if(g) printf("tVAR_DEC\n");
                 return VAR;}
-"string"    {printf("DTYPE_S ");
+"string"    {if(g) printf("tDTYPE_S ");
                 return D_STRING;}
-"float"     {printf("DTYPE_F ");
+"float"     {if(g) printf("tDTYPE_F ");
                 return D_FLOAT;}
-"int"       {printf("DTYPE_I ");
+"int"       {if(g) printf("tDTYPE_I ");
                 return D_INT;}
-"boolean"   {printf("DTYPE_B ");
+"boolean"   {if(g) printf("tDTYPE_B ");
                 return D_BOOL;}
 
-"if"        {printf("IF ");
+"if"        {if(g) printf("tIF ");
                 return IF;}
-"else"      {printf("ELSE ");
+"else"      {if(g) printf("tELSE ");
                 return ELSE;}
 
-"while"     {printf("WHILE ");
+"while"     {if(g) printf("tWHILE ");
                 return WHILE;}
 
-"print"     {printf("PRINT ");
+"print"     {if(g) printf("tPRINT ");
                 return PRINT;}
-"read"      {printf("READ ");
+"read"      {if(g) printf("tREAD ");
                 return READ;}
 
-"!"         {printf("! ");
+"!"         {if(g) printf("tNOT");
                 return NOT;}
-"="         {printf("= ");
+"="         {if(g) printf("tASS");
                 return ASS;}
 
-"+"         {printf("+ ");
+"+"         {if(g) printf("tADD");
                 return ADD;}
-"-"         {printf("- ");
+"-"         {if(g) printf("tMINUS");
                 return SUB;}
-"*"         {printf("* ");
+"*"         {if(g) printf("tMUL ");
                 return MUL;}
-"/"         {printf("/ ");
+"/"         {if(g) printf("tDIV ");
                 return DIV;}
 
-">="        {printf(">= ");
+">="        {if(g) printf("tGEQ ");
                 return GEQ;}
-"<="        {printf("<= ");
+"<="        {if(g) printf("tLEQ ");
                 return LEQ;}
-">"         {printf("> ");
+">"         {if(g) printf("tGT ");
                 return GT;}
-"<"         {printf("< ");
+"<"         {if(g) printf("tLT ");
                 return LT;}
 
-"=="        {printf("== ");
+"=="        {if(g) printf("tEQ ");
                 return EQ;}
-"!="        {printf("!= ");
+"!="        {if(g) printf("tNEQ ");
                 return NEQ;}
 
-"&&"        {printf("&& ");
+"&&"        {if(g) printf("tAND ");
                 return AND;}
-"||"        {printf("|| ");
+"||"        {if(g) printf("tOR ");
                 return OR;}
 
-"("         {printf("OPEN_P ");
+"("         {if(g) printf("tOPEN_P ");
                 return CO;}
-")"         {printf("CLOSE_P ");
+")"         {if(g) printf("tCLOSE_P ");
                 return CC;}
 
-"{"         {printf("OPEN_C ");
+"{"         {if(g) printf("tOPEN_C ");
                 return FO;}
-"}"         {printf("CLOSE_C ");
+"}"         {if(g) printf("tCLOSE_C ");
                 return FC;}
 
-":"         {printf(": ");
+":"         {if(g) printf("tCOLON ");
                 return COLON;}
 
-";"         {printf("CE ## ");
+";"         {if(g) printf("CE ## ");
                 return SCOLON;}
 
 
 
-0|[1-9][0-9]*               {printf("INT ");
+0|[1-9][0-9]*               {if(g) printf("tINT(%s) ", yytext);
                                 return INT;}
-[0-9]*                      {printf("ERR_INT ");
+[0-9]*                      {   yyerror("Invalid Integer ");
+                                printf("tERR_INT ");
                                 return ERR;}
 
-0"."[0-9]*|[1-9]+"."[0-9]*  {printf("FLOAT ");
+0"."[0-9]*|[1-9]+"."[0-9]*  {if(g) printf("tFLOAT(%s)", yytext);
                                 return FLOAT;}
-[0-9]*"."[0-9]*             {printf("ERR_FLOAT ");
+[0-9]*"."[0-9]*             {   yyerror("Invalid Floating point number ");
+                                printf("tERR_FLOAT ");
                                 return ERR;}
 
-"true"|"false"              {printf("BOOL ");
+"true"|"false"              {if(g) printf("tBOOL ");
                                 return BOOL;}
 
-\"([a-zA-Z+-/*0-9`~!@#$%^&\(\)_={} \[\];':,.<>?]|"\\a"|"\\b"|"\\f"|"\\n"|"\\n"|"\\r"|"\\t"|"\\v"|"\\\\"|"\\\"")*\" {printf("STRING ");
+\"([a-zA-Z+-/*0-9`~!@#$%^&\(\)_={} \[\];':,.<>?|]|"\\a"|"\\b"|"\\f"|"\\n"|"\\r"|"\\t"|"\\v"|"\\\\"|"\\\"")*\" {if(g) printf("STRING(%s)", yytext);
                                                                                                                         return STRING;}         
 
-[a-zA-Z_][a-zA-Z0-9_]*  {printf("IDENT ");
+[a-zA-Z_][a-zA-Z0-9_]*  {if(g) printf("tIDENT(%s) ", yytext);
                             return IDENT;}
 
-.         {printf("ERR ");
-                    return ERR;}
+.         { yyerror("Invalid INput :(");
+                printf("tERR ");
+                return ERR;}
 
 %%
 
 int yyerror (char const *s) {
 
-    printf("Error in line %d\n", yylineno);
+    printf("Error in line %d :", yylineno);
     fprintf (stderr, "%s\n", s);
 
     return 1;
