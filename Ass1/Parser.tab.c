@@ -1556,8 +1556,12 @@ int main (int argc, char *argv[]) {
         while(yylex());
     }
     else if(!strcmp(argv[1], "parse")) {
-        yyparse();
-        printf("OK\n");
+        int x;
+        x = yyparse();
+
+        if(!x)
+            printf("OK\n");
+        
     }
 
         
@@ -1565,5 +1569,5 @@ int main (int argc, char *argv[]) {
     return 0;
 }
 
-/* we must supply our error function yyerror */
+
 

@@ -26,110 +26,108 @@ int g = 0;
 
 "var"       {if(g) printf("tVAR_DEC\n");
                 return VAR;}
-"string"    {if(g) printf("tDTYPE_S ");
+"string"    {if(g) printf("tDTYPE_S\n ");
                 return D_STRING;}
-"float"     {if(g) printf("tDTYPE_F ");
+"float"     {if(g) printf("tDTYPE_F \n");
                 return D_FLOAT;}
-"int"       {if(g) printf("tDTYPE_I ");
+"int"       {if(g) printf("tDTYPE_I \n");
                 return D_INT;}
-"boolean"   {if(g) printf("tDTYPE_B ");
+"boolean"   {if(g) printf("tDTYPE_B \n");
                 return D_BOOL;}
 
-"if"        {if(g) printf("tIF ");
+"if"        {if(g) printf("tIF \n");
                 return IF;}
-"else"      {if(g) printf("tELSE ");
+"else"      {if(g) printf("tELSE\n ");
                 return ELSE;}
 
-"while"     {if(g) printf("tWHILE ");
+"while"     {if(g) printf("tWHILE \n");
                 return WHILE;}
 
-"print"     {if(g) printf("tPRINT ");
+"print"     {if(g) printf("tPRINT \n");
                 return PRINT;}
-"read"      {if(g) printf("tREAD ");
+"read"      {if(g) printf("tREAD \n");
                 return READ;}
 
-"!"         {if(g) printf("tNOT");
+"!"         {if(g) printf("tNOT\n");
                 return NOT;}
-"="         {if(g) printf("tASS");
+"="         {if(g) printf("tASS\n");
                 return ASS;}
 
-"+"         {if(g) printf("tADD");
+"+"         {if(g) printf("tADD\n");
                 return ADD;}
-"-"         {if(g) printf("tMINUS");
+"-"         {if(g) printf("tMINUS\n");
                 return SUB;}
-"*"         {if(g) printf("tMUL ");
+"*"         {if(g) printf("tMUL\n ");
                 return MUL;}
-"/"         {if(g) printf("tDIV ");
+"/"         {if(g) printf("tDIV\n ");
                 return DIV;}
 
-">="        {if(g) printf("tGEQ ");
+">="        {if(g) printf("tGEQ\n ");
                 return GEQ;}
-"<="        {if(g) printf("tLEQ ");
+"<="        {if(g) printf("tLEQ\n ");
                 return LEQ;}
-">"         {if(g) printf("tGT ");
+">"         {if(g) printf("tGT\n ");
                 return GT;}
-"<"         {if(g) printf("tLT ");
+"<"         {if(g) printf("tLT \n");
                 return LT;}
 
-"=="        {if(g) printf("tEQ ");
+"=="        {if(g) printf("tEQ\n ");
                 return EQ;}
-"!="        {if(g) printf("tNEQ ");
+"!="        {if(g) printf("tNEQ\n ");
                 return NEQ;}
 
-"&&"        {if(g) printf("tAND ");
+"&&"        {if(g) printf("tAND \n");
                 return AND;}
-"||"        {if(g) printf("tOR ");
+"||"        {if(g) printf("tOR \n");
                 return OR;}
 
-"("         {if(g) printf("tOPEN_P ");
+"("         {if(g) printf("tOPEN_P\n ");
                 return CO;}
-")"         {if(g) printf("tCLOSE_P ");
+")"         {if(g) printf("tCLOSE_P\n ");
                 return CC;}
 
-"{"         {if(g) printf("tOPEN_C ");
+"{"         {if(g) printf("tOPEN_C \n");
                 return FO;}
-"}"         {if(g) printf("tCLOSE_C ");
+"}"         {if(g) printf("tCLOSE_C \n");
                 return FC;}
 
-":"         {if(g) printf("tCOLON ");
+":"         {if(g) printf("tCOLON \n");
                 return COLON;}
 
-";"         {if(g) printf("CE ## ");
+";"         {if(g) printf("SEMCOLON \n");
                 return SCOLON;}
 
 
 
-0|[1-9][0-9]*               {if(g) printf("tINT(%s) ", yytext);
+0|[1-9][0-9]*               {if(g) printf("tINT(%s) \n", yytext);
                                 return INT;}
 [0-9]*                      {   yyerror("Invalid Integer ");
-                                printf("tERR_INT ");
+                                printf("tERR_INT \n");
                                 return ERR;}
 
-0"."[0-9]*|[1-9]+"."[0-9]*  {if(g) printf("tFLOAT(%s)", yytext);
+0"."[0-9]*|[1-9]+"."[0-9]*  {if(g) printf("tFLOAT(%s) \n", yytext);
                                 return FLOAT;}
 [0-9]*"."[0-9]*             {   yyerror("Invalid Floating point number ");
-                                printf("tERR_FLOAT ");
+                                printf("tERR_FLOAT \n");
                                 return ERR;}
 
-"true"|"false"              {if(g) printf("tBOOL ");
+"true"|"false"              {if(g) printf("tBOOL \n");
                                 return BOOL;}
 
-\"([a-zA-Z+-/*0-9`~!@#$%^&\(\)_={} \[\];':,.<>?|]|"\\a"|"\\b"|"\\f"|"\\n"|"\\r"|"\\t"|"\\v"|"\\\\"|"\\\"")*\" {if(g) printf("STRING(%s)", yytext);
+\"([a-zA-Z+-/*0-9`~!@#$%^&\(\)_={} \[\];':,.<>?|]|"\\a"|"\\b"|"\\f"|"\\n"|"\\r"|"\\t"|"\\v"|"\\\\"|"\\\"")*\" {if(g) printf("STRING(%s)\n", yytext);
                                                                                                                         return STRING;}         
 
-[a-zA-Z_][a-zA-Z0-9_]*  {if(g) printf("tIDENT(%s) ", yytext);
+[a-zA-Z_][a-zA-Z0-9_]*  {if(g) printf("tIDENT(%s) \n", yytext);
                             return IDENT;}
 
 .         { yyerror("Invalid INput :(");
-                printf("tERR ");
+                printf("tERR \n");
                 return ERR;}
 
 %%
 
 int yyerror (char const *s) {
 
-    printf("Error in line %d :", yylineno);
-    fprintf (stderr, "%s\n", s);
-
-    return 1;
+    fprintf(stderr,"Error: check line %d --> %s ", yylineno, s );
+    exit(1);
 }
