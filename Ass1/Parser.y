@@ -7,7 +7,8 @@
     extern int g;
 %}
 
-%define parse.error verbose
+
+%error-verbose
 
 %token IDENT
 %token INT 

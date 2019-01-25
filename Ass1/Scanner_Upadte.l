@@ -12,6 +12,12 @@
 #include "Parser.tab.h"
 
 int g = 0;
+
+int yyerror (char const *s) {
+
+    fprintf(stderr,"Error: %s --> check line %d \n", s, yylineno);
+    exit(1);
+}
 %}
 
 
@@ -126,8 +132,3 @@ int g = 0;
 
 %%
 
-int yyerror (char const *s) {
-
-    fprintf(stderr,"Error: check line %d --> %s ", yylineno, s );
-    exit(1);
-}
