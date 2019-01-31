@@ -1,0 +1,27 @@
+// THis is yet anohter test program that is used to calculate the sqaure root of a number the proper way
+
+
+var x : string;
+var g : string;
+
+
+read(x);
+read(g);
+
+while(1) {
+    if(x == "var" || "int" || "float" || "string" || "boolean" || "while" || "if" || "else" || "print" || "read") {
+        if(x == "float" || "int" || "boolean" || "string") {            
+            print("tDatatype");
+        }
+        else {
+            print("tKeyWord\n");
+        }
+    }
+    else if (x == "true" || "false") {
+        print("tBoolVal\n");
+    }
+    else if(x == "GGG")
+        print(x);
+}
+
+

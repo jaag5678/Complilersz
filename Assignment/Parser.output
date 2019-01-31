@@ -1,0 +1,1358 @@
+Terminals unused in grammar
+
+   ERR
+
+
+Grammar
+
+    0 $accept: stmts $end
+
+    1 stmts: %empty
+    2      | stmts stmt
+
+    3 stmt: decl
+    4     | read
+    5     | print
+    6     | cond
+    7     | loop
+
+    8 decl: VAR IDENT COLON dtype SCOLON
+    9     | VAR IDENT COLON dtype ASS exp SCOLON
+   10     | IDENT ASS exp SCOLON
+
+   11 dtype: D_INT
+   12      | D_FLOAT
+   13      | D_STRING
+   14      | D_BOOL
+
+   15 read: READ CO IDENT CC SCOLON
+
+   16 print: PRINT CO exp CC SCOLON
+
+   17 loop: WHILE CO exp CC FO stmts FC
+
+   18 cond: IF CO exp CC FO stmts FC extend
+
+   19 extend: %empty
+   20       | ELSE FO stmts FC
+   21       | ELSE IF CO exp CC FO stmts FC extend
+
+   22 exp: exp OR f
+   23    | exp AND f
+   24    | f
+
+   25 f: f EQ g
+   26  | f NEQ g
+   27  | g
+
+   28 g: g GEQ h
+   29  | g LEQ h
+   30  | g GT h
+   31  | g LT h
+   32  | h
+
+   33 h: h ADD i
+   34  | h SUB i
+   35  | i
+
+   36 i: i MUL j
+   37  | i DIV j
+   38  | j
+
+   39 j: SUB j
+   40  | NOT j
+   41  | CO exp CC
+   42  | k
+
+   43 k: IDENT
+   44  | INT
+   45  | FLOAT
+   46  | STRING
+   47  | BOOL
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+error (256)
+IDENT (258) 8 9 10 15 43
+INT (259) 44
+FLOAT (260) 45
+STRING (261) 46
+BOOL (262) 47
+D_INT (263) 11
+D_FLOAT (264) 12
+D_STRING (265) 13
+D_BOOL (266) 14
+VAR (267) 8 9
+PRINT (268) 16
+READ (269) 15
+IF (270) 18 21
+ELSE (271) 20 21
+WHILE (272) 17
+ASS (273) 9 10
+NOT (274) 40
+ADD (275) 33
+SUB (276) 34 39
+MUL (277) 36
+DIV (278) 37
+EQ (279) 25
+NEQ (280) 26
+GEQ (281) 28
+LEQ (282) 29
+GT (283) 30
+LT (284) 31
+OR (285) 22
+AND (286) 23
+CO (287) 15 16 17 18 21 41
+CC (288) 15 16 17 18 21 41
+FO (289) 17 18 20 21
+FC (290) 17 18 20 21
+COLON (291) 8 9
+SCOLON (292) 8 9 10 15 16
+ERR (293)
+
+
+Nonterminals, with rules where they appear
+
+$accept (39)
+    on left: 0
+stmts (40)
+    on left: 1 2, on right: 0 2 17 18 20 21
+stmt (41)
+    on left: 3 4 5 6 7, on right: 2
+decl (42)
+    on left: 8 9 10, on right: 3
+dtype (43)
+    on left: 11 12 13 14, on right: 8 9
+read (44)
+    on left: 15, on right: 4
+print (45)
+    on left: 16, on right: 5
+loop (46)
+    on left: 17, on right: 7
+cond (47)
+    on left: 18, on right: 6
+extend (48)
+    on left: 19 20 21, on right: 18 21
+exp (49)
+    on left: 22 23 24, on right: 9 10 16 17 18 21 22 23 41
+f (50)
+    on left: 25 26 27, on right: 22 23 24 25 26
+g (51)
+    on left: 28 29 30 31 32, on right: 25 26 27 28 29 30 31
+h (52)
+    on left: 33 34 35, on right: 28 29 30 31 32 33 34
+i (53)
+    on left: 36 37 38, on right: 33 34 35 36 37
+j (54)
+    on left: 39 40 41 42, on right: 36 37 38 39 40
+k (55)
+    on left: 43 44 45 46 47, on right: 42
+
+
+State 0
+
+    0 $accept: . stmts $end
+
+    $default  reduce using rule 1 (stmts)
+
+    stmts  go to state 1
+
+
+State 1
+
+    0 $accept: stmts . $end
+    2 stmts: stmts . stmt
+
+    $end   shift, and go to state 2
+    IDENT  shift, and go to state 3
+    VAR    shift, and go to state 4
+    PRINT  shift, and go to state 5
+    READ   shift, and go to state 6
+    IF     shift, and go to state 7
+    WHILE  shift, and go to state 8
+
+    stmt   go to state 9
+    decl   go to state 10
+    read   go to state 11
+    print  go to state 12
+    loop   go to state 13
+    cond   go to state 14
+
+
+State 2
+
+    0 $accept: stmts $end .
+
+    $default  accept
+
+
+State 3
+
+   10 decl: IDENT . ASS exp SCOLON
+
+    ASS  shift, and go to state 15
+
+
+State 4
+
+    8 decl: VAR . IDENT COLON dtype SCOLON
+    9     | VAR . IDENT COLON dtype ASS exp SCOLON
+
+    IDENT  shift, and go to state 16
+
+
+State 5
+
+   16 print: PRINT . CO exp CC SCOLON
+
+    CO  shift, and go to state 17
+
+
+State 6
+
+   15 read: READ . CO IDENT CC SCOLON
+
+    CO  shift, and go to state 18
+
+
+State 7
+
+   18 cond: IF . CO exp CC FO stmts FC extend
+
+    CO  shift, and go to state 19
+
+
+State 8
+
+   17 loop: WHILE . CO exp CC FO stmts FC
+
+    CO  shift, and go to state 20
+
+
+State 9
+
+    2 stmts: stmts stmt .
+
+    $default  reduce using rule 2 (stmts)
+
+
+State 10
+
+    3 stmt: decl .
+
+    $default  reduce using rule 3 (stmt)
+
+
+State 11
+
+    4 stmt: read .
+
+    $default  reduce using rule 4 (stmt)
+
+
+State 12
+
+    5 stmt: print .
+
+    $default  reduce using rule 5 (stmt)
+
+
+State 13
+
+    7 stmt: loop .
+
+    $default  reduce using rule 7 (stmt)
+
+
+State 14
+
+    6 stmt: cond .
+
+    $default  reduce using rule 6 (stmt)
+
+
+State 15
+
+   10 decl: IDENT ASS . exp SCOLON
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    exp  go to state 29
+    f    go to state 30
+    g    go to state 31
+    h    go to state 32
+    i    go to state 33
+    j    go to state 34
+    k    go to state 35
+
+
+State 16
+
+    8 decl: VAR IDENT . COLON dtype SCOLON
+    9     | VAR IDENT . COLON dtype ASS exp SCOLON
+
+    COLON  shift, and go to state 36
+
+
+State 17
+
+   16 print: PRINT CO . exp CC SCOLON
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    exp  go to state 37
+    f    go to state 30
+    g    go to state 31
+    h    go to state 32
+    i    go to state 33
+    j    go to state 34
+    k    go to state 35
+
+
+State 18
+
+   15 read: READ CO . IDENT CC SCOLON
+
+    IDENT  shift, and go to state 38
+
+
+State 19
+
+   18 cond: IF CO . exp CC FO stmts FC extend
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    exp  go to state 39
+    f    go to state 30
+    g    go to state 31
+    h    go to state 32
+    i    go to state 33
+    j    go to state 34
+    k    go to state 35
+
+
+State 20
+
+   17 loop: WHILE CO . exp CC FO stmts FC
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    exp  go to state 40
+    f    go to state 30
+    g    go to state 31
+    h    go to state 32
+    i    go to state 33
+    j    go to state 34
+    k    go to state 35
+
+
+State 21
+
+   43 k: IDENT .
+
+    $default  reduce using rule 43 (k)
+
+
+State 22
+
+   44 k: INT .
+
+    $default  reduce using rule 44 (k)
+
+
+State 23
+
+   45 k: FLOAT .
+
+    $default  reduce using rule 45 (k)
+
+
+State 24
+
+   46 k: STRING .
+
+    $default  reduce using rule 46 (k)
+
+
+State 25
+
+   47 k: BOOL .
+
+    $default  reduce using rule 47 (k)
+
+
+State 26
+
+   40 j: NOT . j
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    j  go to state 41
+    k  go to state 35
+
+
+State 27
+
+   39 j: SUB . j
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    j  go to state 42
+    k  go to state 35
+
+
+State 28
+
+   41 j: CO . exp CC
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    exp  go to state 43
+    f    go to state 30
+    g    go to state 31
+    h    go to state 32
+    i    go to state 33
+    j    go to state 34
+    k    go to state 35
+
+
+State 29
+
+   10 decl: IDENT ASS exp . SCOLON
+   22 exp: exp . OR f
+   23    | exp . AND f
+
+    OR      shift, and go to state 44
+    AND     shift, and go to state 45
+    SCOLON  shift, and go to state 46
+
+
+State 30
+
+   24 exp: f .
+   25 f: f . EQ g
+   26  | f . NEQ g
+
+    EQ   shift, and go to state 47
+    NEQ  shift, and go to state 48
+
+    $default  reduce using rule 24 (exp)
+
+
+State 31
+
+   27 f: g .
+   28 g: g . GEQ h
+   29  | g . LEQ h
+   30  | g . GT h
+   31  | g . LT h
+
+    GEQ  shift, and go to state 49
+    LEQ  shift, and go to state 50
+    GT   shift, and go to state 51
+    LT   shift, and go to state 52
+
+    $default  reduce using rule 27 (f)
+
+
+State 32
+
+   32 g: h .
+   33 h: h . ADD i
+   34  | h . SUB i
+
+    ADD  shift, and go to state 53
+    SUB  shift, and go to state 54
+
+    $default  reduce using rule 32 (g)
+
+
+State 33
+
+   35 h: i .
+   36 i: i . MUL j
+   37  | i . DIV j
+
+    MUL  shift, and go to state 55
+    DIV  shift, and go to state 56
+
+    $default  reduce using rule 35 (h)
+
+
+State 34
+
+   38 i: j .
+
+    $default  reduce using rule 38 (i)
+
+
+State 35
+
+   42 j: k .
+
+    $default  reduce using rule 42 (j)
+
+
+State 36
+
+    8 decl: VAR IDENT COLON . dtype SCOLON
+    9     | VAR IDENT COLON . dtype ASS exp SCOLON
+
+    D_INT     shift, and go to state 57
+    D_FLOAT   shift, and go to state 58
+    D_STRING  shift, and go to state 59
+    D_BOOL    shift, and go to state 60
+
+    dtype  go to state 61
+
+
+State 37
+
+   16 print: PRINT CO exp . CC SCOLON
+   22 exp: exp . OR f
+   23    | exp . AND f
+
+    OR   shift, and go to state 44
+    AND  shift, and go to state 45
+    CC   shift, and go to state 62
+
+
+State 38
+
+   15 read: READ CO IDENT . CC SCOLON
+
+    CC  shift, and go to state 63
+
+
+State 39
+
+   18 cond: IF CO exp . CC FO stmts FC extend
+   22 exp: exp . OR f
+   23    | exp . AND f
+
+    OR   shift, and go to state 44
+    AND  shift, and go to state 45
+    CC   shift, and go to state 64
+
+
+State 40
+
+   17 loop: WHILE CO exp . CC FO stmts FC
+   22 exp: exp . OR f
+   23    | exp . AND f
+
+    OR   shift, and go to state 44
+    AND  shift, and go to state 45
+    CC   shift, and go to state 65
+
+
+State 41
+
+   40 j: NOT j .
+
+    $default  reduce using rule 40 (j)
+
+
+State 42
+
+   39 j: SUB j .
+
+    $default  reduce using rule 39 (j)
+
+
+State 43
+
+   22 exp: exp . OR f
+   23    | exp . AND f
+   41 j: CO exp . CC
+
+    OR   shift, and go to state 44
+    AND  shift, and go to state 45
+    CC   shift, and go to state 66
+
+
+State 44
+
+   22 exp: exp OR . f
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    f  go to state 67
+    g  go to state 31
+    h  go to state 32
+    i  go to state 33
+    j  go to state 34
+    k  go to state 35
+
+
+State 45
+
+   23 exp: exp AND . f
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    f  go to state 68
+    g  go to state 31
+    h  go to state 32
+    i  go to state 33
+    j  go to state 34
+    k  go to state 35
+
+
+State 46
+
+   10 decl: IDENT ASS exp SCOLON .
+
+    $default  reduce using rule 10 (decl)
+
+
+State 47
+
+   25 f: f EQ . g
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    g  go to state 69
+    h  go to state 32
+    i  go to state 33
+    j  go to state 34
+    k  go to state 35
+
+
+State 48
+
+   26 f: f NEQ . g
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    g  go to state 70
+    h  go to state 32
+    i  go to state 33
+    j  go to state 34
+    k  go to state 35
+
+
+State 49
+
+   28 g: g GEQ . h
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    h  go to state 71
+    i  go to state 33
+    j  go to state 34
+    k  go to state 35
+
+
+State 50
+
+   29 g: g LEQ . h
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    h  go to state 72
+    i  go to state 33
+    j  go to state 34
+    k  go to state 35
+
+
+State 51
+
+   30 g: g GT . h
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    h  go to state 73
+    i  go to state 33
+    j  go to state 34
+    k  go to state 35
+
+
+State 52
+
+   31 g: g LT . h
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    h  go to state 74
+    i  go to state 33
+    j  go to state 34
+    k  go to state 35
+
+
+State 53
+
+   33 h: h ADD . i
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    i  go to state 75
+    j  go to state 34
+    k  go to state 35
+
+
+State 54
+
+   34 h: h SUB . i
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    i  go to state 76
+    j  go to state 34
+    k  go to state 35
+
+
+State 55
+
+   36 i: i MUL . j
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    j  go to state 77
+    k  go to state 35
+
+
+State 56
+
+   37 i: i DIV . j
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    j  go to state 78
+    k  go to state 35
+
+
+State 57
+
+   11 dtype: D_INT .
+
+    $default  reduce using rule 11 (dtype)
+
+
+State 58
+
+   12 dtype: D_FLOAT .
+
+    $default  reduce using rule 12 (dtype)
+
+
+State 59
+
+   13 dtype: D_STRING .
+
+    $default  reduce using rule 13 (dtype)
+
+
+State 60
+
+   14 dtype: D_BOOL .
+
+    $default  reduce using rule 14 (dtype)
+
+
+State 61
+
+    8 decl: VAR IDENT COLON dtype . SCOLON
+    9     | VAR IDENT COLON dtype . ASS exp SCOLON
+
+    ASS     shift, and go to state 79
+    SCOLON  shift, and go to state 80
+
+
+State 62
+
+   16 print: PRINT CO exp CC . SCOLON
+
+    SCOLON  shift, and go to state 81
+
+
+State 63
+
+   15 read: READ CO IDENT CC . SCOLON
+
+    SCOLON  shift, and go to state 82
+
+
+State 64
+
+   18 cond: IF CO exp CC . FO stmts FC extend
+
+    FO  shift, and go to state 83
+
+
+State 65
+
+   17 loop: WHILE CO exp CC . FO stmts FC
+
+    FO  shift, and go to state 84
+
+
+State 66
+
+   41 j: CO exp CC .
+
+    $default  reduce using rule 41 (j)
+
+
+State 67
+
+   22 exp: exp OR f .
+   25 f: f . EQ g
+   26  | f . NEQ g
+
+    EQ   shift, and go to state 47
+    NEQ  shift, and go to state 48
+
+    $default  reduce using rule 22 (exp)
+
+
+State 68
+
+   23 exp: exp AND f .
+   25 f: f . EQ g
+   26  | f . NEQ g
+
+    EQ   shift, and go to state 47
+    NEQ  shift, and go to state 48
+
+    $default  reduce using rule 23 (exp)
+
+
+State 69
+
+   25 f: f EQ g .
+   28 g: g . GEQ h
+   29  | g . LEQ h
+   30  | g . GT h
+   31  | g . LT h
+
+    GEQ  shift, and go to state 49
+    LEQ  shift, and go to state 50
+    GT   shift, and go to state 51
+    LT   shift, and go to state 52
+
+    $default  reduce using rule 25 (f)
+
+
+State 70
+
+   26 f: f NEQ g .
+   28 g: g . GEQ h
+   29  | g . LEQ h
+   30  | g . GT h
+   31  | g . LT h
+
+    GEQ  shift, and go to state 49
+    LEQ  shift, and go to state 50
+    GT   shift, and go to state 51
+    LT   shift, and go to state 52
+
+    $default  reduce using rule 26 (f)
+
+
+State 71
+
+   28 g: g GEQ h .
+   33 h: h . ADD i
+   34  | h . SUB i
+
+    ADD  shift, and go to state 53
+    SUB  shift, and go to state 54
+
+    $default  reduce using rule 28 (g)
+
+
+State 72
+
+   29 g: g LEQ h .
+   33 h: h . ADD i
+   34  | h . SUB i
+
+    ADD  shift, and go to state 53
+    SUB  shift, and go to state 54
+
+    $default  reduce using rule 29 (g)
+
+
+State 73
+
+   30 g: g GT h .
+   33 h: h . ADD i
+   34  | h . SUB i
+
+    ADD  shift, and go to state 53
+    SUB  shift, and go to state 54
+
+    $default  reduce using rule 30 (g)
+
+
+State 74
+
+   31 g: g LT h .
+   33 h: h . ADD i
+   34  | h . SUB i
+
+    ADD  shift, and go to state 53
+    SUB  shift, and go to state 54
+
+    $default  reduce using rule 31 (g)
+
+
+State 75
+
+   33 h: h ADD i .
+   36 i: i . MUL j
+   37  | i . DIV j
+
+    MUL  shift, and go to state 55
+    DIV  shift, and go to state 56
+
+    $default  reduce using rule 33 (h)
+
+
+State 76
+
+   34 h: h SUB i .
+   36 i: i . MUL j
+   37  | i . DIV j
+
+    MUL  shift, and go to state 55
+    DIV  shift, and go to state 56
+
+    $default  reduce using rule 34 (h)
+
+
+State 77
+
+   36 i: i MUL j .
+
+    $default  reduce using rule 36 (i)
+
+
+State 78
+
+   37 i: i DIV j .
+
+    $default  reduce using rule 37 (i)
+
+
+State 79
+
+    9 decl: VAR IDENT COLON dtype ASS . exp SCOLON
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    exp  go to state 85
+    f    go to state 30
+    g    go to state 31
+    h    go to state 32
+    i    go to state 33
+    j    go to state 34
+    k    go to state 35
+
+
+State 80
+
+    8 decl: VAR IDENT COLON dtype SCOLON .
+
+    $default  reduce using rule 8 (decl)
+
+
+State 81
+
+   16 print: PRINT CO exp CC SCOLON .
+
+    $default  reduce using rule 16 (print)
+
+
+State 82
+
+   15 read: READ CO IDENT CC SCOLON .
+
+    $default  reduce using rule 15 (read)
+
+
+State 83
+
+   18 cond: IF CO exp CC FO . stmts FC extend
+
+    $default  reduce using rule 1 (stmts)
+
+    stmts  go to state 86
+
+
+State 84
+
+   17 loop: WHILE CO exp CC FO . stmts FC
+
+    $default  reduce using rule 1 (stmts)
+
+    stmts  go to state 87
+
+
+State 85
+
+    9 decl: VAR IDENT COLON dtype ASS exp . SCOLON
+   22 exp: exp . OR f
+   23    | exp . AND f
+
+    OR      shift, and go to state 44
+    AND     shift, and go to state 45
+    SCOLON  shift, and go to state 88
+
+
+State 86
+
+    2 stmts: stmts . stmt
+   18 cond: IF CO exp CC FO stmts . FC extend
+
+    IDENT  shift, and go to state 3
+    VAR    shift, and go to state 4
+    PRINT  shift, and go to state 5
+    READ   shift, and go to state 6
+    IF     shift, and go to state 7
+    WHILE  shift, and go to state 8
+    FC     shift, and go to state 89
+
+    stmt   go to state 9
+    decl   go to state 10
+    read   go to state 11
+    print  go to state 12
+    loop   go to state 13
+    cond   go to state 14
+
+
+State 87
+
+    2 stmts: stmts . stmt
+   17 loop: WHILE CO exp CC FO stmts . FC
+
+    IDENT  shift, and go to state 3
+    VAR    shift, and go to state 4
+    PRINT  shift, and go to state 5
+    READ   shift, and go to state 6
+    IF     shift, and go to state 7
+    WHILE  shift, and go to state 8
+    FC     shift, and go to state 90
+
+    stmt   go to state 9
+    decl   go to state 10
+    read   go to state 11
+    print  go to state 12
+    loop   go to state 13
+    cond   go to state 14
+
+
+State 88
+
+    9 decl: VAR IDENT COLON dtype ASS exp SCOLON .
+
+    $default  reduce using rule 9 (decl)
+
+
+State 89
+
+   18 cond: IF CO exp CC FO stmts FC . extend
+
+    ELSE  shift, and go to state 91
+
+    $default  reduce using rule 19 (extend)
+
+    extend  go to state 92
+
+
+State 90
+
+   17 loop: WHILE CO exp CC FO stmts FC .
+
+    $default  reduce using rule 17 (loop)
+
+
+State 91
+
+   20 extend: ELSE . FO stmts FC
+   21       | ELSE . IF CO exp CC FO stmts FC extend
+
+    IF  shift, and go to state 93
+    FO  shift, and go to state 94
+
+
+State 92
+
+   18 cond: IF CO exp CC FO stmts FC extend .
+
+    $default  reduce using rule 18 (cond)
+
+
+State 93
+
+   21 extend: ELSE IF . CO exp CC FO stmts FC extend
+
+    CO  shift, and go to state 95
+
+
+State 94
+
+   20 extend: ELSE FO . stmts FC
+
+    $default  reduce using rule 1 (stmts)
+
+    stmts  go to state 96
+
+
+State 95
+
+   21 extend: ELSE IF CO . exp CC FO stmts FC extend
+
+    IDENT   shift, and go to state 21
+    INT     shift, and go to state 22
+    FLOAT   shift, and go to state 23
+    STRING  shift, and go to state 24
+    BOOL    shift, and go to state 25
+    NOT     shift, and go to state 26
+    SUB     shift, and go to state 27
+    CO      shift, and go to state 28
+
+    exp  go to state 97
+    f    go to state 30
+    g    go to state 31
+    h    go to state 32
+    i    go to state 33
+    j    go to state 34
+    k    go to state 35
+
+
+State 96
+
+    2 stmts: stmts . stmt
+   20 extend: ELSE FO stmts . FC
+
+    IDENT  shift, and go to state 3
+    VAR    shift, and go to state 4
+    PRINT  shift, and go to state 5
+    READ   shift, and go to state 6
+    IF     shift, and go to state 7
+    WHILE  shift, and go to state 8
+    FC     shift, and go to state 98
+
+    stmt   go to state 9
+    decl   go to state 10
+    read   go to state 11
+    print  go to state 12
+    loop   go to state 13
+    cond   go to state 14
+
+
+State 97
+
+   21 extend: ELSE IF CO exp . CC FO stmts FC extend
+   22 exp: exp . OR f
+   23    | exp . AND f
+
+    OR   shift, and go to state 44
+    AND  shift, and go to state 45
+    CC   shift, and go to state 99
+
+
+State 98
+
+   20 extend: ELSE FO stmts FC .
+
+    $default  reduce using rule 20 (extend)
+
+
+State 99
+
+   21 extend: ELSE IF CO exp CC . FO stmts FC extend
+
+    FO  shift, and go to state 100
+
+
+State 100
+
+   21 extend: ELSE IF CO exp CC FO . stmts FC extend
+
+    $default  reduce using rule 1 (stmts)
+
+    stmts  go to state 101
+
+
+State 101
+
+    2 stmts: stmts . stmt
+   21 extend: ELSE IF CO exp CC FO stmts . FC extend
+
+    IDENT  shift, and go to state 3
+    VAR    shift, and go to state 4
+    PRINT  shift, and go to state 5
+    READ   shift, and go to state 6
+    IF     shift, and go to state 7
+    WHILE  shift, and go to state 8
+    FC     shift, and go to state 102
+
+    stmt   go to state 9
+    decl   go to state 10
+    read   go to state 11
+    print  go to state 12
+    loop   go to state 13
+    cond   go to state 14
+
+
+State 102
+
+   21 extend: ELSE IF CO exp CC FO stmts FC . extend
+
+    ELSE  shift, and go to state 91
+
+    $default  reduce using rule 19 (extend)
+
+    extend  go to state 103
+
+
+State 103
+
+   21 extend: ELSE IF CO exp CC FO stmts FC extend .
+
+    $default  reduce using rule 21 (extend)

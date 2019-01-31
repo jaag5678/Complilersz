@@ -1,0 +1,45 @@
+// Simple Program created to test my scanner / parser 
+// The program itself might look a but complex but its alrighht. All is in good hands so good game
+
+//The program calcualtes the gcd of numbers a and b
+//The general idea is gcd(a, b) = gcd(a, b % a) if(b > a)
+//You need to loop until one of them becomes 1 or 0
+//If 0, then the gcd is the other numbers
+//If 1, the gcd is 1
+
+var a : int;
+var b : int;
+
+var temp : int;
+
+read (a);
+read(b);
+
+if(a > b) {
+    tmp  = a;
+    a = b;
+    b = tmp;
+}
+
+while(a != 1 || a != 0) {
+    while(b > a) {
+        b = b - a;
+    }
+    if(b < 0) {
+        b = b + a;
+    }
+    tmp = a;
+    a = b;
+    b = tmp;
+}
+
+print ("GCD IS ");
+
+if(a == 1) {
+    print (1);
+}
+else {
+    print (b);
+}
+print ("\n");
+
