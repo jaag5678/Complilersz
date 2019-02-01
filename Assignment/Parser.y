@@ -20,6 +20,8 @@
 %error-verbose
 
 %union {
+    int int_val;
+    float float_val;
     Statements *stmts;
     struct Stmt *stmt;
     Exp *exp;
@@ -32,13 +34,12 @@
 %type <exp> exp f g h i j k
 %type <dec> decl
 %type <type> dtype
-%type <str> IDENT VAR
-%type <stmts> stmts
+%type <stmts> stmts program
 %type <stmt> stmt read print loop cond extend
 
-%token IDENT
-%token INT 
-%token FLOAT
+%token <str> IDENT
+%token <int_val> INT 
+%token <float_val> FLOAT
 %token STRING
 %token BOOL
 
@@ -47,7 +48,7 @@
 %token D_FLOAT
 %token D_STRING
 %token D_BOOL
-%token VAR
+%token <str> VAR
 %token PRINT
 %token READ
 %token IF
@@ -94,9 +95,11 @@
 
 %%
 
+program :  stmts {AST = $1;}
+;
+
 stmts : %empty  {$$ = NULL;}
-        | stmts stmt {$$ = create_program ($1, $2);
-                        AST = $$;}
+        | stmts stmt {$$ = create_program ($1, $2);}
 ;
 stmt :  decl    {$$ = create_statement(DECLARATION, $1, NULL, NULL, NULL);}
         | read  {$$ = $1;}
@@ -107,12 +110,12 @@ stmt :  decl    {$$ = create_statement(DECLARATION, $1, NULL, NULL, NULL);}
 
 decl :   VAR IDENT COLON dtype SCOLON {$$ = create_decl($2, $4, NULL);}
         | VAR IDENT COLON dtype ASS exp SCOLON  {$$ = create_decl($2, $4, $6);}
-        | IDENT ASS exp SCOLON  {$$ = create_decl($1, NULL, $3);}
+        | IDENT ASS exp SCOLON  {$$ = create_decl($1, UNDEF, $3);}
 ;
-dtype : D_INT   {$$ = INT;}
-        | D_FLOAT   {$$ = FLOAT;}
-        | D_STRING  {$$ = STRING;}
-        | D_BOOL    {$$ = BOOL;}
+dtype : D_INT   {$$ = INTEGER;}
+        | D_FLOAT   {$$ = FLOATING;}
+        | D_STRING  {$$ = STRING_DT;}
+        | D_BOOL    {$$ = BOOL_DT;}
 ;
 
 read : READ CO IDENT CC SCOLON  {   Exp *exp = malloc(sizeof(Exp));
@@ -131,38 +134,38 @@ extend : %empty         {$$ = NULL;}
         | ELSE FO stmts FC   {$$ = create_statement(ELSE_ST, NULL, NULL, $3, NULL);}
         | ELSE IF CO exp CC FO stmts FC extend  {$$ = create_statement(ELSE_IF_ST, NULL, $4, $7, $9);}
 ;
-exp : exp OR f  {$$ = create_exp(NULL, $1, $3, '|');}
-    | exp AND f  {$$ = create_exp(NULL, $1, $3, '&');}
-    | f 
+exp : exp OR f  {$$ = create_exp(NULL, $1, $3, OROR);}
+    | exp AND f  {$$ = create_exp(NULL, $1, $3, ANDAND);}
+    | f         {$$ = $1;}
 ;
-f : f EQ g    {$$ = create_exp(NULL, $1, $3, '+');}
-    | f NEQ g  {$$ = create_exp(NULL, $1, $3, '+');}
-    | g
+f : f EQ g    {$$ = create_exp(NULL, $1, $3, EQUAL);}
+    | f NEQ g  {$$ = create_exp(NULL, $1, $3, NOT_EQUAL);}
+    | g         {$$ = $1;}
 ;
-g : g GEQ h  {$$ = create_exp(NULL, $1, $3, '+');}
-    | g LEQ h  {$$ = create_exp(NULL, $1, $3, '+');}
-    | g GT h  {$$ = create_exp(NULL, $1, $3, '+');}
-    | g LT h  {$$ = create_exp(NULL, $1, $3, '+');}
-    | h
+g : g GEQ h  {$$ = create_exp(NULL, $1, $3, GT_EQ);}
+    | g LEQ h  {$$ = create_exp(NULL, $1, $3, LT_EQ);}
+    | g GT h  {$$ = create_exp(NULL, $1, $3, GRT);}
+    | g LT h  {$$ = create_exp(NULL, $1, $3, LTN);}
+    | h         {$$ = $1;}
 ;
-h : h ADD i      {$$ = create_exp(NULL, $1, $3, '+');}
-    | h SUB i  {$$ = create_exp(NULL, $1, $3, '-');}
-    | i
+h : h ADD i      {$$ = create_exp(NULL, $1, $3, PLUS);}
+    | h SUB i  {$$ = create_exp(NULL, $1, $3, MINUS);}
+    | i         {$$ = $1;}
 ;
-i : i MUL j      {$$ = create_exp(NULL, $1, $3, '*');}
-    | i DIV j {$$ = create_exp(NULL, $1, $3, '/');}
-    | j
+i : i MUL j      {$$ = create_exp(NULL, $1, $3, MULT);}
+    | i DIV j {$$ = create_exp(NULL, $1, $3, DIVIDE);}
+    | j     {$$ = $1;}
 ;
-j : SUB j {$$ = create_exp(NULL, NULL, $2, '-');}
-    | NOT j {$$ = create_exp(NULL, NULL, $2, '!');}
+j : SUB j {$$ = create_exp(NULL, NULL, $2, MINUS);}
+    | NOT j {$$ = create_exp(NULL, NULL, $2, COMPL);}
     | CO exp CC {$$ = $2;}
     | k   {$$ = $1;}
 ;
-k : IDENT   {$$ = create_leaf_exp('v', yytext);}
-    | INT   {$$ = create_leaf_exp('i', yytext);}
-    | FLOAT {$$ = create_leaf_exp('f', yytext);}
-    | STRING    {$$ = create_leaf_exp('s', yytext);}
-    | BOOL  {$$ = create_leaf_exp('b', yytext);}
+k : IDENT   {$$ = create_leaf_exp(VAR_DT, $1);}
+    | INT   {$$ = create_leaf_exp(INTEGER, yytext);}
+    | FLOAT {$$ = create_leaf_exp(FLOATING, yytext);}
+    | STRING    {$$ = create_leaf_exp(STRING_DT, yytext);}
+    | BOOL  {$$ = create_leaf_exp(BOOL_DT, yytext);}
 ;
 
 %%
@@ -196,7 +199,7 @@ int main (int argc, char *argv[]) {
         if(!x)
             printf("OK\n");
         
-        
+        Print_AST(AST);
     }
 
         

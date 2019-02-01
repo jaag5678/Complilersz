@@ -1072,59 +1072,62 @@ case 34:
 YY_RULE_SETUP
 #line 108 "Scanner_Upadte.l"
 {if(g) printf("tINT(%s) \n", yytext);
+                                yylval.int_val = atoi(yytext);
                                 return INT;}
 	YY_BREAK
 case 35:
 YY_RULE_SETUP
-#line 110 "Scanner_Upadte.l"
+#line 111 "Scanner_Upadte.l"
 {   yyerror("Invalid Integer ");
                                 printf("tERR_INT \n");
                                 return ERR;}
 	YY_BREAK
 case 36:
 YY_RULE_SETUP
-#line 114 "Scanner_Upadte.l"
+#line 115 "Scanner_Upadte.l"
 {if(g) printf("tFLOAT(%s) \n", yytext);
+                                yylval.float_val = atof(yytext);
                                 return FLOAT;}
 	YY_BREAK
 case 37:
 YY_RULE_SETUP
-#line 116 "Scanner_Upadte.l"
+#line 118 "Scanner_Upadte.l"
 {   yyerror("Invalid Floating point number ");
                                 printf("tERR_FLOAT \n");
                                 return ERR;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
-#line 120 "Scanner_Upadte.l"
+#line 122 "Scanner_Upadte.l"
 {if(g) printf("tBOOL \n");
                                 return BOOL;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
-#line 123 "Scanner_Upadte.l"
+#line 125 "Scanner_Upadte.l"
 {if(g) printf("STRING(%s)\n", yytext);
                                                                                                                         return STRING;}         
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
-#line 126 "Scanner_Upadte.l"
+#line 128 "Scanner_Upadte.l"
 {if(g) printf("tIDENT(%s) \n", yytext);
+                            yylval.str = strdup(yytext);
                             return IDENT;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
-#line 129 "Scanner_Upadte.l"
+#line 132 "Scanner_Upadte.l"
 { yyerror("Invalid INput :(");
                 printf("tERR \n");
                 return ERR;}
 	YY_BREAK
 case 42:
 YY_RULE_SETUP
-#line 133 "Scanner_Upadte.l"
+#line 136 "Scanner_Upadte.l"
 ECHO;
 	YY_BREAK
-#line 1128 "lex.yy.c"
+#line 1131 "lex.yy.c"
 case YY_STATE_EOF(INITIAL):
 	yyterminate();
 
@@ -2137,7 +2140,7 @@ void yyfree (void * ptr )
 
 #define YYTABLES_NAME "yytables"
 
-#line 133 "Scanner_Upadte.l"
+#line 136 "Scanner_Upadte.l"
 
 
 

@@ -5,7 +5,22 @@
 
 //Node that defines expressions 
 typedef struct Exp {
-    char op; //Define the operator that is working on the expression. A '\0' would imply no operation and the expression is going to be converted to a value
+    enum {
+        OROR,
+        ANDAND,
+        EQUAL,
+        NOT_EQUAL,
+        GT_EQ,
+        LT_EQ,
+        GRT,
+        LTN,
+        PLUS,
+        MINUS,
+        MULT,
+        DIVIDE,
+        COMPL
+
+    }op; //Define the operator that is working on the expression. A '\0' would imply no operation and the expression is going to be converted to a value
     union {
         int ival; //Integer value
         float fval; //Float value
@@ -52,7 +67,7 @@ typedef struct Statments {
         }stmt_type;
         union {
             Decl *declaration;
-            Exp *exp; //In case it is read / print it will be expression
+            Exp *read_print; //In case it is read / print it will be expression
             struct Loop {
                 Exp *exp;
                 struct Statements *stmts;
@@ -70,7 +85,7 @@ typedef struct Statments {
 Exp *create_leaf_exp(int type, char *text_to_val);
 
 //There will be just one function to create expressions 
-Exp *create_exp(char *text, Exp *left, Exp *right, char op);
+Exp *create_exp(char *text, Exp *left, Exp *right, int op);
 
 //Create a declaration 
 Decl *create_decl( char *ident, int datatype, Exp *exp);
@@ -82,5 +97,3 @@ struct Stmt *create_statement ( int type_of_st, Decl *decl, Exp *exp, Statements
 Statements *create_program(Statements *stmts, struct Stmt *stmt);
 
 
-//Print the entiree program again
-void Print_AST(Statements *AST);

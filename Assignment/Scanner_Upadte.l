@@ -106,12 +106,14 @@ int yyerror (char const *s) {
 
 
 0|[1-9][0-9]*               {if(g) printf("tINT(%s) \n", yytext);
+                                yylval.int_val = atoi(yytext);
                                 return INT;}
 [0-9]*                      {   yyerror("Invalid Integer ");
                                 printf("tERR_INT \n");
                                 return ERR;}
 
 0"."[0-9]*|[1-9]+"."[0-9]*  {if(g) printf("tFLOAT(%s) \n", yytext);
+                                yylval.float_val = atof(yytext);
                                 return FLOAT;}
 [0-9]*"."[0-9]*             {   yyerror("Invalid Floating point number ");
                                 printf("tERR_FLOAT \n");
@@ -124,6 +126,7 @@ int yyerror (char const *s) {
                                                                                                                         return STRING;}         
 
 [a-zA-Z_][a-zA-Z0-9_]*  {if(g) printf("tIDENT(%s) \n", yytext);
+                            yylval.str = strdup(yytext);
                             return IDENT;}
 
 .         { yyerror("Invalid INput :(");

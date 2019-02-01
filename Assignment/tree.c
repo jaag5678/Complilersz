@@ -16,12 +16,15 @@ Exp *create_leaf_exp(int type, char *text_to_val) {
         Leaf -> u.ident = text_to_val;
     Leaf -> datatype = type; //IF it is an identifier, we must obtain the type ffrom the symbol table. Check this later
 
+    Leaf -> op = -1;
+
+    //printf("LEaf done \n");
     return Leaf;
 }
 
 
 //There will be just one function to create expressions 
-Exp * create_exp(char *text, Exp *left, Exp *right, char op) {
+Exp * create_exp(char *text, Exp *left, Exp *right, int op) {
 
     Exp *NewExp = (Exp *)malloc(sizeof(Exp));
     NewExp -> op = op;
@@ -40,6 +43,10 @@ Exp * create_exp(char *text, Exp *left, Exp *right, char op) {
 //Create a declaration 
 Decl *create_decl(char *ident, int datatype, Exp *exp) {
 
+    //printf(" %s \n", ident);
+    //printf(" %d \n", datatype);
+    
+    //printf(" %d \n", exp -> op);
     Decl *NewDec = (Decl*)malloc(sizeof(Decl));
     NewDec -> ident = ident;
     NewDec -> datatype = datatype;
@@ -50,16 +57,17 @@ Decl *create_decl(char *ident, int datatype, Exp *exp) {
 
 struct Stmt *create_statement ( int type_of_st, Decl *decl, Exp *exp, Statements *stmts, struct Stmt *optional) {
 
-    printf("STatement Creation \t");
+    //printf("STatement Creation \t");
     struct Stmt *statement = (struct Stmt*)malloc(sizeof(struct Stmt));
     statement -> stmt_type = type_of_st;
     switch (statement -> stmt_type) {
         case DECLARATION:   {
+            //printf("HID \n");
              statement -> body_of_stmt.declaration = decl;
         }
         break;
-        case PRINT_ST | PRINT_ST: {
-            statement -> body_of_stmt.exp = exp;
+        case PRINT_ST: case READ_ST: {
+            statement -> body_of_stmt.read_print = exp;
         }
         break;
         case WHILE_ST: {
@@ -67,13 +75,13 @@ struct Stmt *create_statement ( int type_of_st, Decl *decl, Exp *exp, Statements
             statement -> body_of_stmt.loop.stmts = stmts;
         }
         break;
-        case IF_ST | ELSE_ST | ELSE_IF_ST: {
+        case IF_ST: case ELSE_ST: case ELSE_IF_ST: {
             statement -> body_of_stmt.cond.exp = exp;
             statement -> body_of_stmt.cond.stmts = stmts;
             statement -> body_of_stmt.cond.op_else_if = optional;
         }
     }
-    printf("STatemnt created \n");
+    //printf("STatemnt created \n");
     return statement;
 }
 
@@ -81,10 +89,7 @@ Statements *create_program(Statements *stmts, struct Stmt *stmt) {
     Statements *program = (Statements*)malloc(sizeof(Statements));
     program -> stmts = stmts;
     program -> stmt = stmt;
-    printf("UHIUHIUHUIH\n");
+    //printf("UHIUHIUHUIH\n");
     return program;
 }
 
-void Print_AST(Statements *AST) {
-    
-}

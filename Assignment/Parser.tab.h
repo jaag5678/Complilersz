@@ -98,6 +98,8 @@ union YYSTYPE
 {
 #line 22 "Parser.y" /* yacc.c:1909  */
 
+    int int_val;
+    float float_val;
     Statements *stmts;
     struct Stmt *stmt;
     Exp *exp;
@@ -106,7 +108,7 @@ union YYSTYPE
     char dt;
     int type;
 
-#line 110 "Parser.tab.h" /* yacc.c:1909  */
+#line 112 "Parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
