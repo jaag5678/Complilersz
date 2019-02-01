@@ -43,8 +43,9 @@ extern int yydebug;
 #line 13 "Parser.y" /* yacc.c:1909  */
 
     #include"tree.h"
+    Statements *AST;
 
-#line 48 "Parser.tab.h" /* yacc.c:1909  */
+#line 49 "Parser.tab.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -95,14 +96,17 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 19 "Parser.y" /* yacc.c:1909  */
+#line 22 "Parser.y" /* yacc.c:1909  */
 
+    Statements *stmts;
+    struct Stmt *stmt;
     Exp *exp;
     Decl *dec; 
     char *str;
     char dt;
+    int type;
 
-#line 106 "Parser.tab.h" /* yacc.c:1909  */
+#line 110 "Parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

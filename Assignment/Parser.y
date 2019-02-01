@@ -12,21 +12,29 @@
 
 %code requires {
     #include"tree.h"
+    Statements *AST;
 }
+
+
 
 %error-verbose
 
 %union {
+    Statements *stmts;
+    struct Stmt *stmt;
     Exp *exp;
     Decl *dec; 
     char *str;
     char dt;
+    int type;
 }
 
 %type <exp> exp f g h i j k
 %type <dec> decl
-%type <dt> dtype
+%type <type> dtype
 %type <str> IDENT VAR
+%type <stmts> stmts
+%type <stmt> stmt read print loop cond extend
 
 %token IDENT
 %token INT 
@@ -86,51 +94,55 @@
 
 %%
 
-stmts : %empty
-        | stmts stmt 
+stmts : %empty  {$$ = NULL;}
+        | stmts stmt {$$ = create_program ($1, $2);
+                        AST = $$;}
 ;
-stmt :  decl
-        | read
-        | print
-        | cond
-        | loop
-;
-
-decl :   VAR IDENT COLON dtype SCOLON {$$ = create_decl($1, $2, $4, NULL);}
-        | VAR IDENT COLON dtype ASS exp SCOLON  {$$ = create_decl($1, $2, $4, $6);}
-        | IDENT ASS exp SCOLON  {$$ = create_decl(NULL, $1, NULL, $3);}
-;
-dtype : D_INT   {$$ = 'i';}
-        | D_FLOAT   {$$ = 'f';}
-        | D_STRING  {$$ = 's';}
-        | D_BOOL    {$$ = 'b';}
+stmt :  decl    {$$ = create_statement(DECLARATION, $1, NULL, NULL, NULL);}
+        | read  {$$ = $1;}
+        | print {$$ = $1;}
+        | cond  {$$ = $1;}
+        | loop  {$$ = $1;}
 ;
 
-read : READ CO IDENT CC SCOLON
+decl :   VAR IDENT COLON dtype SCOLON {$$ = create_decl($2, $4, NULL);}
+        | VAR IDENT COLON dtype ASS exp SCOLON  {$$ = create_decl($2, $4, $6);}
+        | IDENT ASS exp SCOLON  {$$ = create_decl($1, NULL, $3);}
+;
+dtype : D_INT   {$$ = INT;}
+        | D_FLOAT   {$$ = FLOAT;}
+        | D_STRING  {$$ = STRING;}
+        | D_BOOL    {$$ = BOOL;}
+;
+
+read : READ CO IDENT CC SCOLON  {   Exp *exp = malloc(sizeof(Exp));
+                                    exp -> datatype = VAR;
+                                    exp -> u.ident = $3;
+                                    $$ = create_statement(READ_ST, NULL, exp, NULL, NULL);}
 ;       
-print : PRINT CO exp CC SCOLON
+print : PRINT CO exp CC SCOLON  {$$ = create_statement(PRINT_ST, NULL, $3, NULL, NULL);}
 ;
 
-loop : WHILE CO exp CC FO stmts FC
+loop : WHILE CO exp CC FO stmts FC {$$ = create_statement(WHILE_ST, NULL, $3, $6, NULL);}
 ;
-cond : IF CO exp CC FO stmts FC extend
+cond : IF CO exp CC FO stmts FC extend  {$$ = create_statement(IF_ST, NULL, $3, $6, $8);}
 ;
-extend : %empty
-        | ELSE FO stmts FC
-        | ELSE IF CO exp CC FO stmts FC extend
+extend : %empty         {$$ = NULL;}
+        | ELSE FO stmts FC   {$$ = create_statement(ELSE_ST, NULL, NULL, $3, NULL);}
+        | ELSE IF CO exp CC FO stmts FC extend  {$$ = create_statement(ELSE_IF_ST, NULL, $4, $7, $9);}
 ;
-exp : exp OR f 
-    | exp AND f 
+exp : exp OR f  {$$ = create_exp(NULL, $1, $3, '|');}
+    | exp AND f  {$$ = create_exp(NULL, $1, $3, '&');}
     | f 
 ;
-f : f EQ g   
-    | f NEQ g 
+f : f EQ g    {$$ = create_exp(NULL, $1, $3, '+');}
+    | f NEQ g  {$$ = create_exp(NULL, $1, $3, '+');}
     | g
 ;
-g : g GEQ h 
-    | g LEQ h 
-    | g GT h
-    | g LT h 
+g : g GEQ h  {$$ = create_exp(NULL, $1, $3, '+');}
+    | g LEQ h  {$$ = create_exp(NULL, $1, $3, '+');}
+    | g GT h  {$$ = create_exp(NULL, $1, $3, '+');}
+    | g LT h  {$$ = create_exp(NULL, $1, $3, '+');}
     | h
 ;
 h : h ADD i      {$$ = create_exp(NULL, $1, $3, '+');}
@@ -183,6 +195,7 @@ int main (int argc, char *argv[]) {
 
         if(!x)
             printf("OK\n");
+        
         
     }
 
