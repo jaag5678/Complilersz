@@ -20,8 +20,9 @@ while(1) {
     else if (x == "true" || "false") {
         print("tBoolVal\n");
     }
-    else if(x == "GGG")
+    else if(x == "GGG") {
         print(x);
+    }
 }
 
 

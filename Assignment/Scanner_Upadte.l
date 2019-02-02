@@ -22,7 +22,6 @@ int yyerror (char const *s) {
 
 
 %option yylineno
-%option verbose
 
 %%
 
@@ -120,9 +119,11 @@ int yyerror (char const *s) {
                                 return ERR;}
 
 "true"|"false"              {if(g) printf("tBOOL \n");
+                                yylval.str = strdup(yytext);
                                 return BOOL;}
 
 \"([a-zA-Z+-/*0-9`~!@#$%^&\(\)_={} \[\];':,.<>?|]|"\\a"|"\\b"|"\\f"|"\\n"|"\\r"|"\\t"|"\\v"|"\\\\"|"\\\"")*\" {if(g) printf("STRING(%s)\n", yytext);
+                                                                                                                        yylval.str = strdup(yytext);                                                                                      
                                                                                                                         return STRING;}         
 
 [a-zA-Z_][a-zA-Z0-9_]*  {if(g) printf("tIDENT(%s) \n", yytext);

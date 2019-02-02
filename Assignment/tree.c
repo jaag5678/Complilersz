@@ -67,6 +67,7 @@ struct Stmt *create_statement ( int type_of_st, Decl *decl, Exp *exp, Statements
         }
         break;
         case PRINT_ST: case READ_ST: {
+            //printf("%s ", exp -> u.ident);
             statement -> body_of_stmt.read_print = exp;
         }
         break;
@@ -80,6 +81,7 @@ struct Stmt *create_statement ( int type_of_st, Decl *decl, Exp *exp, Statements
             statement -> body_of_stmt.cond.stmts = stmts;
             statement -> body_of_stmt.cond.op_else_if = optional;
         }
+        break;
     }
     //printf("STatemnt created \n");
     return statement;

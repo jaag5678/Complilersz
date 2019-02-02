@@ -11,7 +11,7 @@
 
 
 %code requires {
-    #include"tree.h"
+    #include"pretty_print.h"
     Statements *AST;
 }
 
@@ -40,8 +40,8 @@
 %token <str> IDENT
 %token <int_val> INT 
 %token <float_val> FLOAT
-%token STRING
-%token BOOL
+%token <str>STRING
+%token <str>BOOL
 
 /*Keywords*/
 %token D_INT
@@ -119,8 +119,9 @@ dtype : D_INT   {$$ = INTEGER;}
 ;
 
 read : READ CO IDENT CC SCOLON  {   Exp *exp = malloc(sizeof(Exp));
-                                    exp -> datatype = VAR;
+                                    exp -> datatype = VAR_DT;
                                     exp -> u.ident = $3;
+                                    exp -> op = -1;
                                     $$ = create_statement(READ_ST, NULL, exp, NULL, NULL);}
 ;       
 print : PRINT CO exp CC SCOLON  {$$ = create_statement(PRINT_ST, NULL, $3, NULL, NULL);}
@@ -164,8 +165,8 @@ j : SUB j {$$ = create_exp(NULL, NULL, $2, MINUS);}
 k : IDENT   {$$ = create_leaf_exp(VAR_DT, $1);}
     | INT   {$$ = create_leaf_exp(INTEGER, yytext);}
     | FLOAT {$$ = create_leaf_exp(FLOATING, yytext);}
-    | STRING    {$$ = create_leaf_exp(STRING_DT, yytext);}
-    | BOOL  {$$ = create_leaf_exp(BOOL_DT, yytext);}
+    | STRING    {$$ = create_leaf_exp(STRING_DT, $1);}
+    | BOOL  {$$ = create_leaf_exp(BOOL_DT, $1);}
 ;
 
 %%

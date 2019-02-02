@@ -42,7 +42,7 @@ extern int yydebug;
 /* "%code requires" blocks.  */
 #line 13 "Parser.y" /* yacc.c:1909  */
 
-    #include"tree.h"
+    #include"pretty_print.h"
     Statements *AST;
 
 #line 49 "Parser.tab.h" /* yacc.c:1909  */
