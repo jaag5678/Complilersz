@@ -40,12 +40,14 @@
 extern int yydebug;
 #endif
 /* "%code requires" blocks.  */
-#line 13 "Parser.y" /* yacc.c:1909  */
+#line 14 "Parser.y" /* yacc.c:1909  */
 
     #include"pretty_print.h"
     Statements *AST;
+    SymTab *Ancestor_table;
+    SymTab *current_scope_table;
 
-#line 49 "Parser.tab.h" /* yacc.c:1909  */
+#line 51 "Parser.tab.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -96,7 +98,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 22 "Parser.y" /* yacc.c:1909  */
+#line 25 "Parser.y" /* yacc.c:1909  */
 
     int int_val;
     float float_val;
@@ -108,7 +110,7 @@ union YYSTYPE
     char dt;
     int type;
 
-#line 112 "Parser.tab.h" /* yacc.c:1909  */
+#line 114 "Parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -116,9 +118,23 @@ typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_DECLARED 1
 #endif
 
+/* Location type.  */
+#if ! defined YYLTYPE && ! defined YYLTYPE_IS_DECLARED
+typedef struct YYLTYPE YYLTYPE;
+struct YYLTYPE
+{
+  int first_line;
+  int first_column;
+  int last_line;
+  int last_column;
+};
+# define YYLTYPE_IS_DECLARED 1
+# define YYLTYPE_IS_TRIVIAL 1
+#endif
+
 
 extern YYSTYPE yylval;
-
+extern YYLTYPE yylloc;
 int yyparse (void);
 
 #endif /* !YY_YY_PARSER_TAB_H_INCLUDED  */

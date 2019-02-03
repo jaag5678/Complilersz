@@ -5,6 +5,7 @@
     #include<string.h>
    
     extern char *yytext;
+    extern int yylineno;
     extern int g;
     int yylex();
 %}
@@ -13,10 +14,12 @@
 %code requires {
     #include"pretty_print.h"
     Statements *AST;
+    SymTab *Ancestor_table;
+    SymTab *current_scope_table;
 }
 
 
-
+%locations 
 %error-verbose
 
 %union {
@@ -108,8 +111,10 @@ stmt :  decl    {$$ = create_statement(DECLARATION, $1, NULL, NULL, NULL);}
         | loop  {$$ = $1;}
 ;
 
-decl :   VAR IDENT COLON dtype SCOLON {$$ = create_decl($2, $4, NULL);}
-        | VAR IDENT COLON dtype ASS exp SCOLON  {$$ = create_decl($2, $4, $6);}
+decl :   VAR IDENT COLON dtype SCOLON {$$ = create_decl($2, $4, NULL);
+                                        sym_add(current_scope_table, yylineno, $2, $4);}
+        | VAR IDENT COLON dtype ASS exp SCOLON  {$$ = create_decl($2, $4, $6);
+                                        sym_add(current_scope_table, yylineno, $2, $4);}
         | IDENT ASS exp SCOLON  {$$ = create_decl($1, UNDEF, $3);}
 ;
 dtype : D_INT   {$$ = INTEGER;}
@@ -173,6 +178,7 @@ k : IDENT   {$$ = create_leaf_exp(VAR_DT, $1);}
 
 int main (int argc, char *argv[]) {
 
+    current_scope_table = init(Ancestor_table, NULL);
 
     if(argc < 2) 
         printf("Invalid for of running lex / parser. Give type \n");    

@@ -3,24 +3,15 @@
 #include<stdlib.h>
 #include<string.h>
 
+#include"symbol_table.h"
+
+
+
+
 //Node that defines expressions 
 typedef struct Exp {
-    enum {
-        OROR,
-        ANDAND,
-        EQUAL,
-        NOT_EQUAL,
-        GT_EQ,
-        LT_EQ,
-        GRT,
-        LTN,
-        PLUS,
-        MINUS,
-        MULT,
-        DIVIDE,
-        COMPL
-
-    }op; //Define the operator that is working on the expression. A '\0' would imply no operation and the expression is going to be converted to a value
+    //Define the operator that is working on the expression. A '\0' would imply no operation and the expression is going to be converted to a value
+    enum operation op;
     union {
         int ival; //Integer value
         float fval; //Float value
@@ -32,15 +23,7 @@ typedef struct Exp {
             struct Exp *right;
         } binary;
     }u;
-    //char datatype; //Could be int (i) or float (f)
-    enum type {
-        INTEGER, 
-        FLOATING, 
-        STRING_DT, 
-        BOOL_DT,
-        VAR_DT,
-        UNDEF
-    }datatype;
+    enum type datatype;
 
 }Exp;
 
@@ -56,16 +39,7 @@ typedef struct Decl {
 typedef struct Statments {
     struct Statements *stmts;
     struct Stmt {
-        enum {
-            DECLARATION,
-            PRINT_ST,
-            READ_ST,
-            WHILE_ST,
-            IF_ST,
-            ELSE_ST,
-            ELSE_IF_ST
-        }stmt_type;
-
+        enum statement_kind stmt_type;
         union {
             Decl *declaration;
             Exp *read_print; //In case it is read / print it will be expression
