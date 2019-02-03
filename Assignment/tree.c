@@ -58,7 +58,10 @@ Decl *create_decl(char *ident, int datatype, Exp *exp) {
 struct Stmt *create_statement ( int type_of_st, Decl *decl, Exp *exp, Statements *stmts, struct Stmt *optional) {
 
     //printf("STatement Creation \t");
-    struct Stmt *statement = (struct Stmt*)malloc(sizeof(struct Stmt));
+    Statements *s = (Statements *)malloc(sizeof(Statements));
+    s -> stmts = NULL;
+    s -> stmt = (struct Stmt*)malloc(sizeof(struct Stmt));
+    struct Stmt *statement = s -> stmt;
     statement -> stmt_type = type_of_st;
     switch (statement -> stmt_type) {
         case DECLARATION:   {

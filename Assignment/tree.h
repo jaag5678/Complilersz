@@ -65,6 +65,7 @@ typedef struct Statments {
             ELSE_ST,
             ELSE_IF_ST
         }stmt_type;
+
         union {
             Decl *declaration;
             Exp *read_print; //In case it is read / print it will be expression
@@ -78,7 +79,8 @@ typedef struct Statments {
                 struct Stmt *op_else_if;
             }cond;
         }body_of_stmt;
-    }*stmt;
+
+    } *stmt;
 }Statements;
 
 //I can define a separate function to define a leaf in the expression 
