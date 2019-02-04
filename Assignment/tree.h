@@ -2,15 +2,19 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include"essentials.h"
 
-#include"symbol_table.h"
+extern int yylineno;
 
-
-
+typedef struct Statements Statements;
+typedef struct Stmt Stmt;
+typedef struct Exp Exp;
+typedef struct Decl Decl;
+typedef struct Loop Loop;
+typedef struct Cond Cond;
 
 //Node that defines expressions 
-typedef struct Exp {
-    //Define the operator that is working on the expression. A '\0' would imply no operation and the expression is going to be converted to a value
+struct Exp {
     enum operation op;
     union {
         int ival; //Integer value
@@ -19,43 +23,53 @@ typedef struct Exp {
         char *bval; //Binary valure
         char *ident; //Identifier
         struct { 
-            struct Exp *left;
-            struct Exp *right;
+            Exp *left;
+            Exp *right;
         } binary;
     }u;
     enum type datatype;
 
-}Exp;
+};
 
 //Node that defines Declarations
-typedef struct Decl {
+struct Decl {
     char *ident;
     enum type datatype;
     Exp *exp;
 
-}Decl;
+};
+
+//Ndoe to define loops
+struct Loop {
+    Exp *exp;
+    Statements *stmts;
+};
+
+
+//Node to define COnditional statements
+struct Cond {
+    Exp *exp;
+    Statements *stmts;
+    Stmt *op_else_if;
+};
+
+//Ndoe that defines a statment in general
+struct Stmt {
+    int lineno;
+    enum statement_kind stmt_type;
+    union {
+        Decl *declaration;
+        Exp *read_print; //In case it is read / print it will be expression
+        Loop loop; 
+        Cond cond;
+    }body_of_stmt;
+};
 
 //Node for set of statements 
-typedef struct Statments {
-    struct Statements *stmts;
-    struct Stmt {
-        enum statement_kind stmt_type;
-        union {
-            Decl *declaration;
-            Exp *read_print; //In case it is read / print it will be expression
-            struct Loop {
-                Exp *exp;
-                struct Statements *stmts;
-            }loop; 
-            struct Cond {
-                Exp *exp;
-                struct Statements *stmts;
-                struct Stmt *op_else_if;
-            }cond;
-        }body_of_stmt;
-
-    } *stmt;
-}Statements;
+struct Statements {
+    Statements *stmts;
+    Stmt *stmt;
+};
 
 //I can define a separate function to define a leaf in the expression 
 Exp *create_leaf_exp(int type, char *text_to_val);
@@ -64,12 +78,11 @@ Exp *create_leaf_exp(int type, char *text_to_val);
 Exp *create_exp(char *text, Exp *left, Exp *right, int op);
 
 //Create a declaration 
-Decl *create_decl( char *ident, int datatype, Exp *exp);
+Decl *create_decl(char *ident, int datatype, Exp *exp);
 
 //Create a statement 
-struct Stmt *create_statement ( int type_of_st, Decl *decl, Exp *exp, Statements *stmts, struct Stmt *optional);
+struct Stmt *create_statement ( int lineno, int type_of_st, Decl *decl, Exp *exp, Statements *stmts, struct Stmt *optional);
 
 //Create statements 
 Statements *create_program(Statements *stmts, struct Stmt *stmt);
-
 

@@ -14,8 +14,6 @@
 %code requires {
     #include"pretty_print.h"
     Statements *AST;
-    SymTab *Ancestor_table;
-    SymTab *current_scope_table;
 }
 
 
@@ -104,17 +102,15 @@ program :  stmts {AST = $1;}
 stmts : %empty  {$$ = NULL;}
         | stmts stmt {$$ = create_program ($1, $2);}
 ;
-stmt :  decl    {$$ = create_statement(DECLARATION, $1, NULL, NULL, NULL);}
+stmt :  decl    {$$ = create_statement(yylineno, DECLARATION, $1, NULL, NULL, NULL);}
         | read  {$$ = $1;}
         | print {$$ = $1;}
         | cond  {$$ = $1;}
         | loop  {$$ = $1;}
 ;
 
-decl :   VAR IDENT COLON dtype SCOLON {$$ = create_decl($2, $4, NULL);
-                                        sym_add(current_scope_table, yylineno, $2, $4);}
-        | VAR IDENT COLON dtype ASS exp SCOLON  {$$ = create_decl($2, $4, $6);
-                                        sym_add(current_scope_table, yylineno, $2, $4);}
+decl :   VAR IDENT COLON dtype SCOLON {$$ = create_decl($2, $4, NULL);}
+        | VAR IDENT COLON dtype ASS exp SCOLON  {$$ = create_decl($2, $4, $6);}
         | IDENT ASS exp SCOLON  {$$ = create_decl($1, UNDEF, $3);}
 ;
 dtype : D_INT   {$$ = INTEGER;}
@@ -127,18 +123,18 @@ read : READ CO IDENT CC SCOLON  {   Exp *exp = malloc(sizeof(Exp));
                                     exp -> datatype = VAR_DT;
                                     exp -> u.ident = $3;
                                     exp -> op = -1;
-                                    $$ = create_statement(READ_ST, NULL, exp, NULL, NULL);}
+                                    $$ = create_statement(yylineno, READ_ST, NULL, exp, NULL, NULL);}
 ;       
-print : PRINT CO exp CC SCOLON  {$$ = create_statement(PRINT_ST, NULL, $3, NULL, NULL);}
+print : PRINT CO exp CC SCOLON  {$$ = create_statement(yylineno, PRINT_ST, NULL, $3, NULL, NULL);}
 ;
 
-loop : WHILE CO exp CC FO stmts FC {$$ = create_statement(WHILE_ST, NULL, $3, $6, NULL);}
+loop : WHILE CO exp CC FO stmts FC {$$ = create_statement(yylineno, WHILE_ST, NULL, $3, $6, NULL);}
 ;
-cond : IF CO exp CC FO stmts FC extend  {$$ = create_statement(IF_ST, NULL, $3, $6, $8);}
+cond : IF CO exp CC FO stmts FC extend  {$$ = create_statement(yylineno, IF_ST, NULL, $3, $6, $8);}
 ;
 extend : %empty         {$$ = NULL;}
-        | ELSE FO stmts FC   {$$ = create_statement(ELSE_ST, NULL, NULL, $3, NULL);}
-        | ELSE IF CO exp CC FO stmts FC extend  {$$ = create_statement(ELSE_IF_ST, NULL, $4, $7, $9);}
+        | ELSE FO stmts FC   {$$ = create_statement(yylineno, ELSE_ST, NULL, NULL, $3, NULL);}
+        | ELSE IF CO exp CC FO stmts FC extend  {$$ = create_statement(yylineno, ELSE_IF_ST, NULL, $4, $7, $9);}
 ;
 exp : exp OR f  {$$ = create_exp(NULL, $1, $3, OROR);}
     | exp AND f  {$$ = create_exp(NULL, $1, $3, ANDAND);}
@@ -178,7 +174,11 @@ k : IDENT   {$$ = create_leaf_exp(VAR_DT, $1);}
 
 int main (int argc, char *argv[]) {
 
-    current_scope_table = init(Ancestor_table, NULL);
+    //current_scope_table = init(Ancestor_table, NULL);
+    //printf("Table created\n");
+
+    SymTab *S = init(S, NULL);
+
 
     if(argc < 2) 
         printf("Invalid for of running lex / parser. Give type \n");    
@@ -207,6 +207,7 @@ int main (int argc, char *argv[]) {
             printf("OK\n");
         
         Print_AST(AST);
+        build_symbol_table(AST, S);
     }
 
         

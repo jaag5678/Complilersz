@@ -44,10 +44,8 @@ extern int yydebug;
 
     #include"pretty_print.h"
     Statements *AST;
-    SymTab *Ancestor_table;
-    SymTab *current_scope_table;
 
-#line 51 "Parser.tab.h" /* yacc.c:1909  */
+#line 49 "Parser.tab.h" /* yacc.c:1909  */
 
 /* Token type.  */
 #ifndef YYTOKENTYPE
@@ -98,7 +96,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 25 "Parser.y" /* yacc.c:1909  */
+#line 23 "Parser.y" /* yacc.c:1909  */
 
     int int_val;
     float float_val;
@@ -110,7 +108,7 @@ union YYSTYPE
     char dt;
     int type;
 
-#line 114 "Parser.tab.h" /* yacc.c:1909  */
+#line 112 "Parser.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

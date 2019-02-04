@@ -45,7 +45,6 @@ Decl *create_decl(char *ident, int datatype, Exp *exp) {
 
     //printf(" %s \n", ident);
     //printf(" %d \n", datatype);
-    
     //printf(" %d \n", exp -> op);
     Decl *NewDec = (Decl*)malloc(sizeof(Decl));
     NewDec -> ident = ident;
@@ -55,13 +54,14 @@ Decl *create_decl(char *ident, int datatype, Exp *exp) {
     return NewDec;
 }
 
-struct Stmt *create_statement ( int type_of_st, Decl *decl, Exp *exp, Statements *stmts, struct Stmt *optional) {
+struct Stmt *create_statement (int lineno, int type_of_st, Decl *decl, Exp *exp, Statements *stmts, struct Stmt *optional) {
 
     //printf("STatement Creation \t");
     Statements *s = (Statements *)malloc(sizeof(Statements));
     s -> stmts = NULL;
-    s -> stmt = (struct Stmt*)malloc(sizeof(struct Stmt));
-    struct Stmt *statement = s -> stmt;
+    s -> stmt = (Stmt*)malloc(sizeof(Stmt));
+    Stmt *statement = s -> stmt;
+    statement -> lineno = lineno;
     statement -> stmt_type = type_of_st;
     switch (statement -> stmt_type) {
         case DECLARATION:   {

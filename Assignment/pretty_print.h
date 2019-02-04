@@ -1,4 +1,4 @@
-#include"tree.h"
+#include"symbol_table.h"
 
 //Print the entiree program again
 void Print_AST(Statements *AST);
