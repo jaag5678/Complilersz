@@ -20,7 +20,7 @@ int sym_found(SymTab *S, char *name) {
         return -1;
     int map_val = hash(name);
     if(S -> table[map_val] == NULL)
-        return -1;
+        return sym_found(S -> parent_scope, name);
     return map_val;
 }
 
@@ -39,13 +39,40 @@ int sym_add(SymTab *S, int lineno, char *name, int type) {
     return 1;
 }
 
+void check_exp_symbols(SymTab *S, Exp *exp) {
+    if(!exp)
+        return;
+    
+    switch(exp -> op) {
+        case NO_OP: {
+            int map = sym_found(S, exp -> u.ident);
+            if(map == -1) {
+                printf("Identifier %s not defined \n", exp -> u.ident);
+                exit(1);
+            }
+            exp -> datatype = S -> table[map] -> datatype;
+        }
+        break;
+        default: {
+            check_exp_symbols(S, exp -> u.binary.left);
+            check_exp_symbols(S, exp -> u.binary.right);
+            //By now we have for sure determined the type of the subexpressions 
+            //So we can assign a type to the current expression is its valid on both sides
+            //If its still UNDEF then we know that the expression is having conflickting types
+            //However if one is int and the other is float, such computations are allowed so we need to make those exceptions here
+            //NOTE TO MAKE THE CHANGES LATER
+            if(exp -> u.binary.left -> datatype == exp -> u.binary.right -> datatype) 
+                exp -> datatype = exp -> u.binary.left -> datatype; 
+        }
+    }
+} 
+
 void print_symbol(SymTab *S, char *name) {
     int x = hash(name);
 
     printf("Symbol name : %s", name);
 
     printf(" At line %d \n", S -> table[x] ->line_no);
-
 }
 
 
@@ -67,6 +94,7 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                         printf("Identifier  %s not defined \n", dec -> ident);
                         exit(1);
                     }
+                    check_exp_symbols(S, dec -> exp);
                     dec -> datatype = S -> table[sym_found(S, dec -> ident)] -> datatype; 
                 }
                 break;
@@ -76,11 +104,25 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                         exit(1);
                     }
                     sym_add(S, stmt -> lineno, dec -> ident, dec -> datatype);
+                    check_exp_symbols(S, dec -> exp);
                     print_symbol(S, dec -> ident);
                 }
             }
         }
         break;
+
+        case PRINT_ST: case READ_ST: {
+            check_exp_symbols(S, stmt -> body_of_stmt.read_print);
+        }
+        break;
+
+        case WHILE_ST: {
+            check_exp_symbols(S, stmt -> body_of_stmt.loop.exp);
+            //Now to create a new table and link it to the parent table
+            SymTab *New = (SymTab *)malloc(sizeof(SymTab));
+            init(New, S);
+            build_symbol_table(stmt -> body_of_stmt.loop.stmts, New);
+        }
 
     }
 

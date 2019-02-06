@@ -34,6 +34,9 @@ int sym_add(SymTab *S, int line_no, char *ident, int type);
 //Check if identifier exists in valid scopes
 int check_valid_scope(SymTab *S, char *name);
 
+//Funnction to verify symbols in expresssions are actually defined before in symbol table
+void check_exp_symbols(SymTab *S, Exp *exp);
+
 //Print Symbol
 void print_symbol(SymTab *S, char *name);
 

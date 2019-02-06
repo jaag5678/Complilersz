@@ -3,6 +3,7 @@
 
 //Enumerator for type of operation
 enum operation{
+    NO_OP = -1,
     OROR,
     ANDAND,
     EQUAL,

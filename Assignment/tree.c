@@ -16,7 +16,7 @@ Exp *create_leaf_exp(int type, char *text_to_val) {
         Leaf -> u.ident = text_to_val;
     Leaf -> datatype = type; //IF it is an identifier, we must obtain the type ffrom the symbol table. Check this later
 
-    Leaf -> op = -1;
+    Leaf -> op = NO_OP;
 
     //printf("LEaf done \n");
     return Leaf;
