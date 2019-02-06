@@ -45,12 +45,14 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
     
     switch(exp -> op) {
         case NO_OP: {
-            int map = sym_found(S, exp -> u.ident);
-            if(map == -1) {
-                printf("Identifier %s not defined \n", exp -> u.ident);
-                exit(1);
+            if(exp -> datatype == VAR_DT) {
+                int map = sym_found(S, exp -> u.ident);
+                if(map == -1) {
+                    printf("Identifier %s not defined \n", exp -> u.ident);
+                    exit(1);
+                }
+                exp -> datatype = S -> table[map] -> datatype;
             }
-            exp -> datatype = S -> table[map] -> datatype;
         }
         break;
         default: {
@@ -123,6 +125,30 @@ int build_symbol_table(Statements *AST, SymTab *S) {
             init(New, S);
             build_symbol_table(stmt -> body_of_stmt.loop.stmts, New);
         }
+        break;
+
+        case IF_ST: case ELSE_IF_ST: case ELSE_ST: { 
+            while(1) {
+                int c = stmt -> stmt_type;
+
+                switch(c) {
+                    case IF_ST : case ELSE_IF_ST: {
+                        check_exp_symbols(S, stmt -> body_of_stmt.cond.exp);
+                    }
+                    break;
+                }
+
+                SymTab *New = (SymTab *)malloc(sizeof(SymTab));
+                init(New, S);
+                build_symbol_table(stmt -> body_of_stmt.cond.stmts, New);
+
+                if(stmt -> body_of_stmt.cond.op_else_if != NULL) 
+                    c = stmt -> body_of_stmt.cond.op_else_if -> stmt_type;
+                else
+                    break;
+            }
+        }
+        break;
 
     }
 

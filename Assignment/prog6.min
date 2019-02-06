@@ -1,29 +1,3 @@
-var a : int;
-var b : int;
-var temp : int;
-read (a);
-read (b);
-if ((a>b)) { 
-tmp = a;
-a = b;
-b = tmp;
-} 
-while (((a!=1)||(a!=0))) {
- 	while ((b>a)) {
- 	b = (b-a);
-}
-if ((b<0)) { 
-b = (b+a);
-} 
-tmp = a;
-a = b;
-b = tmp;
-}
-print ("GCD IS ");
-if ((a==1)) { 
-print (1);
-} 
-else { 
-print (b);
-} 
-print ("\n");
+var a : int ;
+var b : int ;
+var x : int = 4359786487;
