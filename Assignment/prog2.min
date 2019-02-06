@@ -10,7 +10,7 @@
 var a : int;
 var b : int;
 
-var temp : int;
+var tmp : int;
 
 read (a);
 read(b);

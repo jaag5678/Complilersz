@@ -51,6 +51,11 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                     printf("Identifier %s not defined \n", exp -> u.ident);
                     exit(1);
                 }
+                printf("%s %d \n", exp -> u.ident, map);
+                //THis is not as literal as you see it
+                //This can have a mapping to some parent scope which we cannot accerss directly 
+                //SO the point is to change it inside the procedure???????????? 
+                //WHat to do ?? NOTE THIS IS WHAT YOU NEED TO TAKE CARE OF 
                 exp -> datatype = S -> table[map] -> datatype;
             }
         }
@@ -121,9 +126,9 @@ int build_symbol_table(Statements *AST, SymTab *S) {
         case WHILE_ST: {
             check_exp_symbols(S, stmt -> body_of_stmt.loop.exp);
             //Now to create a new table and link it to the parent table
-            SymTab *New = (SymTab *)malloc(sizeof(SymTab));
-            init(New, S);
+            SymTab *New = init(New, S);
             build_symbol_table(stmt -> body_of_stmt.loop.stmts, New);
+            printf("I am out ! \n");
         }
         break;
 
@@ -139,11 +144,13 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                 }
 
                 SymTab *New = (SymTab *)malloc(sizeof(SymTab));
-                init(New, S);
+                New = init(New, S);
                 build_symbol_table(stmt -> body_of_stmt.cond.stmts, New);
 
-                if(stmt -> body_of_stmt.cond.op_else_if != NULL) 
-                    c = stmt -> body_of_stmt.cond.op_else_if -> stmt_type;
+                if(stmt -> body_of_stmt.cond.op_else_if != NULL) {
+                    stmt = stmt -> body_of_stmt.cond.op_else_if;
+                    c = stmt -> stmt_type;
+                }
                 else
                     break;
             }

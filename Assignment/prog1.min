@@ -1,21 +1,17 @@
 var x : int;
 var d : int = 0;
-
+var n : int ;
 read (n);
-var c : string;
+
 
 
 
 while(n) {
-    read (c);
-    if(c == "D") {
-        d = d + 1;
-    }
-    else {
-        d = d - 1;
-    }
-
-    print(d);
+    var c : string;
+    var gg : float;
+    print(c);
+    read(d);
 }
 
+var gg : int;
 print (d);
