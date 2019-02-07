@@ -1,3 +1,25 @@
 var a : int ;
 var b : int ;
-var x : int = 4359786487;
+var c : int ;
+
+if(a) {
+    var a : int ;
+    var b : int ;
+    var c : int ;
+
+    if(b) {
+        var a : int ;
+        var b : float = 89543789534 * 7356784356;
+        var c : string;
+        var x : int;
+        while(c) {
+            var a : boolean;
+            var b : string;
+            var c : float;
+            print(x);
+        }
+        read(x);
+    }
+    var tt : int;
+    print(x);
+}

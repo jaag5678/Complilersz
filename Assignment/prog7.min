@@ -1,0 +1,11 @@
+var a : int;
+var b : float;
+var c : string;
+var d : string;
+
+a = a + a;
+b = b + b;
+b = a + b;
+c = c + d;
+
+c = c + c;

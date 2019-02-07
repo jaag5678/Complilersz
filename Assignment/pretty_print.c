@@ -75,7 +75,7 @@ void Print_AST(Statements *AST) {
                 break;
                 case BOOL_DT: printf("var %s : boolean", temp -> ident);
                 break;
-                case UNDEF: printf("%s", temp -> ident);
+                default: printf("%s", temp -> ident);
             }
             if(temp -> exp != NULL) {
                 printf(" = ");

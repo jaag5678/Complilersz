@@ -26,7 +26,7 @@ SymTab *init(SymTab *S, SymTab *parent);
 int hash(char *name);
 
 //To check if symbol found in table
-int sym_found(SymTab *S, char *name);
+Sym *sym_found(SymTab *S, char *name, int bit);
 
 //Add symbol to the table
 int sym_add(SymTab *S, int line_no, char *ident, int type);
@@ -39,4 +39,3 @@ void check_exp_symbols(SymTab *S, Exp *exp);
 
 //Print Symbol
 void print_symbol(SymTab *S, char *name);
-

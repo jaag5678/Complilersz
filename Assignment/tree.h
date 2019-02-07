@@ -75,7 +75,7 @@ struct Statements {
 Exp *create_leaf_exp(int type, char *text_to_val);
 
 //There will be just one function to create expressions 
-Exp *create_exp(char *text, Exp *left, Exp *right, int op);
+Exp *create_exp(Exp *left, Exp *right, int op);
 
 //Create a declaration 
 Decl *create_decl(char *ident, int datatype, Exp *exp);

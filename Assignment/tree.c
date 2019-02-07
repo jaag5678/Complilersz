@@ -14,6 +14,7 @@ Exp *create_leaf_exp(int type, char *text_to_val) {
         Leaf -> u.bval = text_to_val;   
     else 
         Leaf -> u.ident = text_to_val;
+    //if(type )
     Leaf -> datatype = type; //IF it is an identifier, we must obtain the type ffrom the symbol table. Check this later
 
     Leaf -> op = NO_OP;
@@ -24,15 +25,15 @@ Exp *create_leaf_exp(int type, char *text_to_val) {
 
 
 //There will be just one function to create expressions 
-Exp * create_exp(char *text, Exp *left, Exp *right, int op) {
+Exp * create_exp(Exp *left, Exp *right, int op) {
 
     Exp *NewExp = (Exp *)malloc(sizeof(Exp));
     NewExp -> op = op;
-   
-    if(left -> datatype == right -> datatype) 
-        NewExp -> datatype = left -> datatype;
-    else 
-        NewExp -> datatype = UNDEF; //To say its undefined as the subexpressions are of differnet types. THis will help us in analysys further
+    
+    //if(left -> datatype == right -> datatype) 
+      //  NewExp -> datatype = left -> datatype;
+    //else 
+        //NewExp -> datatype = UNDEF; //To say its undefined as the subexpressions are of differnet types. THis will help us in analysys further
     
     NewExp -> u.binary.left = left;
     NewExp -> u.binary.right = right;
@@ -48,8 +49,10 @@ Decl *create_decl(char *ident, int datatype, Exp *exp) {
     //printf(" %d \n", exp -> op);
     Decl *NewDec = (Decl*)malloc(sizeof(Decl));
     NewDec -> ident = ident;
-    NewDec -> datatype = datatype;
+   
     NewDec -> exp = exp;
+
+    NewDec -> datatype = datatype;
 
     return NewDec;
 }

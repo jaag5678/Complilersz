@@ -1500,7 +1500,7 @@ yyreduce:
 
   case 12:
 #line 114 "Parser.y" /* yacc.c:1646  */
-    {(yyval.dec) = create_decl((yyvsp[-3].str), UNDEF, (yyvsp[-1].exp));}
+    {(yyval.dec) = create_decl((yyvsp[-3].str), -1, (yyvsp[-1].exp));}
 #line 1505 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1531,7 +1531,7 @@ yyreduce:
   case 17:
 #line 122 "Parser.y" /* yacc.c:1646  */
     {   Exp *exp = malloc(sizeof(Exp));
-                                    exp -> datatype = VAR_DT;
+                                    //exp -> datatype = VAR_DT;
                                     exp -> u.ident = (yyvsp[-2].str);
                                     exp -> op = -1;
                                     (yyval.stmt) = create_statement(yylineno, READ_ST, NULL, exp, NULL, NULL);}
@@ -1576,13 +1576,13 @@ yyreduce:
 
   case 24:
 #line 139 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), OROR);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), OROR);}
 #line 1581 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 25:
 #line 140 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), ANDAND);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), ANDAND);}
 #line 1587 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1594,13 +1594,13 @@ yyreduce:
 
   case 27:
 #line 143 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), EQUAL);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), EQUAL);}
 #line 1599 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
 #line 144 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), NOT_EQUAL);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), NOT_EQUAL);}
 #line 1605 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1612,25 +1612,25 @@ yyreduce:
 
   case 30:
 #line 147 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), GT_EQ);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), GT_EQ);}
 #line 1617 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 31:
 #line 148 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), LT_EQ);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), LT_EQ);}
 #line 1623 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
 #line 149 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), GRT);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), GRT);}
 #line 1629 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 33:
 #line 150 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), LTN);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), LTN);}
 #line 1635 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1642,13 +1642,13 @@ yyreduce:
 
   case 35:
 #line 153 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), PLUS);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), PLUS);}
 #line 1647 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
 #line 154 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), MINUS);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), MINUS);}
 #line 1653 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1660,13 +1660,13 @@ yyreduce:
 
   case 38:
 #line 157 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), MULT);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), MULT);}
 #line 1665 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 39:
 #line 158 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, (yyvsp[-2].exp), (yyvsp[0].exp), DIVIDE);}
+    {(yyval.exp) = create_exp((yyvsp[-2].exp), (yyvsp[0].exp), DIVIDE);}
 #line 1671 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1678,13 +1678,13 @@ yyreduce:
 
   case 41:
 #line 161 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, NULL, (yyvsp[0].exp), MINUS);}
+    {(yyval.exp) = create_exp(NULL, (yyvsp[0].exp), MINUS);}
 #line 1683 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 42:
 #line 162 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_exp(NULL, NULL, (yyvsp[0].exp), COMPL);}
+    {(yyval.exp) = create_exp(NULL, (yyvsp[0].exp), COMPL);}
 #line 1689 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1975,7 +1975,8 @@ int main (int argc, char *argv[]) {
     //printf("Table created\n");
 
     SymTab *S = init(S, NULL);
-
+    if(!(S -> parent_scope))
+        printf("Good \n");
 
     if(argc < 2) 
         printf("Invalid for of running lex / parser. Give type \n");    

@@ -111,7 +111,7 @@ stmt :  decl    {$$ = create_statement(yylineno, DECLARATION, $1, NULL, NULL, NU
 
 decl :   VAR IDENT COLON dtype SCOLON {$$ = create_decl($2, $4, NULL);}
         | VAR IDENT COLON dtype ASS exp SCOLON  {$$ = create_decl($2, $4, $6);}
-        | IDENT ASS exp SCOLON  {$$ = create_decl($1, UNDEF, $3);}
+        | IDENT ASS exp SCOLON  {$$ = create_decl($1, -1, $3);}
 ;
 dtype : D_INT   {$$ = INTEGER;}
         | D_FLOAT   {$$ = FLOATING;}
@@ -120,7 +120,7 @@ dtype : D_INT   {$$ = INTEGER;}
 ;
 
 read : READ CO IDENT CC SCOLON  {   Exp *exp = malloc(sizeof(Exp));
-                                    exp -> datatype = VAR_DT;
+                                    //exp -> datatype = VAR_DT;
                                     exp -> u.ident = $3;
                                     exp -> op = -1;
                                     $$ = create_statement(yylineno, READ_ST, NULL, exp, NULL, NULL);}
@@ -136,30 +136,30 @@ extend : %empty         {$$ = NULL;}
         | ELSE FO stmts FC   {$$ = create_statement(yylineno, ELSE_ST, NULL, NULL, $3, NULL);}
         | ELSE IF CO exp CC FO stmts FC extend  {$$ = create_statement(yylineno, ELSE_IF_ST, NULL, $4, $7, $9);}
 ;
-exp : exp OR f  {$$ = create_exp(NULL, $1, $3, OROR);}
-    | exp AND f  {$$ = create_exp(NULL, $1, $3, ANDAND);}
+exp : exp OR f  {$$ = create_exp($1, $3, OROR);}
+    | exp AND f  {$$ = create_exp($1, $3, ANDAND);}
     | f         {$$ = $1;}
 ;
-f : f EQ g    {$$ = create_exp(NULL, $1, $3, EQUAL);}
-    | f NEQ g  {$$ = create_exp(NULL, $1, $3, NOT_EQUAL);}
+f : f EQ g    {$$ = create_exp($1, $3, EQUAL);}
+    | f NEQ g  {$$ = create_exp($1, $3, NOT_EQUAL);}
     | g         {$$ = $1;}
 ;
-g : g GEQ h  {$$ = create_exp(NULL, $1, $3, GT_EQ);}
-    | g LEQ h  {$$ = create_exp(NULL, $1, $3, LT_EQ);}
-    | g GT h  {$$ = create_exp(NULL, $1, $3, GRT);}
-    | g LT h  {$$ = create_exp(NULL, $1, $3, LTN);}
+g : g GEQ h  {$$ = create_exp($1, $3, GT_EQ);}
+    | g LEQ h  {$$ = create_exp($1, $3, LT_EQ);}
+    | g GT h  {$$ = create_exp($1, $3, GRT);}
+    | g LT h  {$$ = create_exp($1, $3, LTN);}
     | h         {$$ = $1;}
 ;
-h : h ADD i      {$$ = create_exp(NULL, $1, $3, PLUS);}
-    | h SUB i  {$$ = create_exp(NULL, $1, $3, MINUS);}
+h : h ADD i      {$$ = create_exp($1, $3, PLUS);}
+    | h SUB i  {$$ = create_exp($1, $3, MINUS);}
     | i         {$$ = $1;}
 ;
-i : i MUL j      {$$ = create_exp(NULL, $1, $3, MULT);}
-    | i DIV j {$$ = create_exp(NULL, $1, $3, DIVIDE);}
+i : i MUL j      {$$ = create_exp($1, $3, MULT);}
+    | i DIV j {$$ = create_exp($1, $3, DIVIDE);}
     | j     {$$ = $1;}
 ;
-j : SUB j {$$ = create_exp(NULL, NULL, $2, MINUS);}
-    | NOT j {$$ = create_exp(NULL, NULL, $2, COMPL);}
+j : SUB j {$$ = create_exp(NULL, $2, MINUS);}
+    | NOT j {$$ = create_exp(NULL, $2, COMPL);}
     | CO exp CC {$$ = $2;}
     | k   {$$ = $1;}
 ;
@@ -178,7 +178,8 @@ int main (int argc, char *argv[]) {
     //printf("Table created\n");
 
     SymTab *S = init(S, NULL);
-
+    if(!(S -> parent_scope))
+        printf("Good \n");
 
     if(argc < 2) 
         printf("Invalid for of running lex / parser. Give type \n");    
