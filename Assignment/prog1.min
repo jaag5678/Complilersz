@@ -6,7 +6,7 @@ read (n);
 
 
 
-while(n) {
+while(n > 0) {
     var c : string;
     var gg : float;
     print(c);

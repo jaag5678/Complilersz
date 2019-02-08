@@ -8,7 +8,7 @@ b = b + b;
 b = a + b;
 c = c + d;
 
-c = c + c;
+c = c + c + c ;
 
 var x : boolean;
 

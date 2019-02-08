@@ -51,13 +51,13 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
     switch(exp -> op) {
         case NO_OP: {
             if(exp -> datatype == VAR_DT) {
-                Sym *E = sym_found(S, exp -> u.ident, 1);
+                Sym *E = sym_found(S, exp -> u.literal, 1);
                 //printf("Z \n");
                 if(!E) {
-                    printf("Identifier %s not defined \n", exp -> u.ident);
+                    printf("Identifier %s not defined \n", exp -> u.literal);
                     exit(1);
                 }
-                int map = hash(exp -> u.ident);
+                int map = hash(exp -> u.literal);
                 //printf("%s %d \n", exp -> u.ident, map);
                 if(E -> datatype == STRING_DT)
                     printf("Ass Dt \n");
@@ -68,15 +68,6 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
         default: {
             check_exp_symbols(S, exp -> u.binary.left);
             check_exp_symbols(S, exp -> u.binary.right);
-            //By now we have for sure determined the type of the subexpressions 
-            //So we can assign a type to the current expression is its valid on both sides
-            //If its still UNDEF then we know that the expression is having conflickting types
-            //However if one is int and the other is float, such computations are allowed so we need to make those exceptions here
-            //NOTE TO MAKE THE CHANGES LATER
-
-            //I want to ensure that here every type is determined to one of the four datatypes mentioned in the spec of MiniLang
-            //if(exp -> u.binary.left -> datatype == exp -> u.binary.right -> datatype) 
-              //  exp -> datatype = exp -> u.binary.left -> datatype; 
             
             if(exp -> u.binary.left == NULL) {
                 int type = exp -> u.binary.right -> datatype;
@@ -198,13 +189,14 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                         printf("Identifier  %s not defined \n", dec -> ident);
                         exit(1);
                     }
-                    dec -> datatype = E -> datatype; 
+                    //dec -> datatype = E -> datatype; 
+                    dec -> datatype = VAR_DT;
                     if(E -> datatype == STRING_DT)
                         printf("AssGGG Dt \n");
                     printf("H %d \n", dec -> exp -> datatype);
                     check_exp_symbols(S, dec -> exp);
                     printf("N %d \n", dec -> exp -> datatype);
-                    if(dec -> exp -> datatype != dec -> datatype) {
+                    if(dec -> exp -> datatype != E -> datatype) {
                         printf("Assignment error: Conflicting types \n");
                         exit(1);
                     }

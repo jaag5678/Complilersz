@@ -4,6 +4,7 @@
 Exp *create_leaf_exp(int type, char *text_to_val) {
     Exp *Leaf = (Exp*)malloc(sizeof(Exp));
 
+/*
     if(type == INTEGER)
         Leaf -> u.ival = atoi(text_to_val);
     else if(type == FLOATING)
@@ -13,8 +14,11 @@ Exp *create_leaf_exp(int type, char *text_to_val) {
     else if (type == BOOL_DT) 
         Leaf -> u.bval = text_to_val;   
     else 
-        Leaf -> u.ident = text_to_val;
+        Leaf -> ident = text_to_val;
     //if(type )
+    */
+   //printf("Text %s \n", text_to_val );
+    Leaf -> u.literal = text_to_val;
     Leaf -> datatype = type; //IF it is an identifier, we must obtain the type ffrom the symbol table. Check this later
 
     Leaf -> op = NO_OP;
@@ -35,6 +39,7 @@ Exp * create_exp(Exp *left, Exp *right, int op) {
     //else 
         //NewExp -> datatype = UNDEF; //To say its undefined as the subexpressions are of differnet types. THis will help us in analysys further
     
+    //printf("Left %s Right %s\n", left->u.literal, right->u.literal);
     NewExp -> u.binary.left = left;
     NewExp -> u.binary.right = right;
 

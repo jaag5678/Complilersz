@@ -12,7 +12,7 @@ if(a) {
         var b : float = 89543789534 * 7356784356;
         var c : string;
         var x : int;
-        while(c) {
+        while(c == "h") {
             var a : boolean;
             var b : string;
             var c : float;
@@ -21,5 +21,5 @@ if(a) {
         read(x);
     }
     var tt : int;
-    print(x);
+    //print(x);
 }

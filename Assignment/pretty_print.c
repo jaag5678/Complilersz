@@ -6,22 +6,13 @@ void print_exp(Exp *exp) {
     if(!exp)
         return;
     if(exp -> op == -1) {
-        switch(exp -> datatype) {
-            case INTEGER: printf("%d", exp -> u.ival);
-            break;
-            case FLOATING: printf("%f", exp -> u.fval);
-            break;
-            case STRING_DT: printf("%s", exp -> u.sval);
-            break;
-            case BOOL_DT: printf("%s", exp -> u.bval);
-            break;
-            case VAR_DT: printf("%s", exp -> u.ident);
-            break;
-        }
+        printf("%s", exp -> u.literal);
+
         return;
     }
     printf("(");
     print_exp(exp -> u.binary.left);
+    //printf(" x ");
     switch(exp -> op) {
         case EQUAL: printf("==");
         break;
@@ -49,6 +40,7 @@ void print_exp(Exp *exp) {
     }
     //printf(" ");
     print_exp(exp ->u.binary.right);
+    //printf(" x ");
     printf(")");
 }
 

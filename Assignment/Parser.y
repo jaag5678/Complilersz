@@ -39,8 +39,8 @@
 %type <stmt> stmt read print loop cond extend
 
 %token <str> IDENT
-%token <int_val> INT 
-%token <float_val> FLOAT
+%token <str> INT 
+%token <str> FLOAT
 %token <str>STRING
 %token <str>BOOL
 
@@ -121,7 +121,7 @@ dtype : D_INT   {$$ = INTEGER;}
 
 read : READ CO IDENT CC SCOLON  {   Exp *exp = malloc(sizeof(Exp));
                                     //exp -> datatype = VAR_DT;
-                                    exp -> u.ident = $3;
+                                    exp -> u.literal = $3;
                                     exp -> op = -1;
                                     $$ = create_statement(yylineno, READ_ST, NULL, exp, NULL, NULL);}
 ;       
@@ -164,8 +164,8 @@ j : SUB j {$$ = create_exp(NULL, $2, MINUS);}
     | k   {$$ = $1;}
 ;
 k : IDENT   {$$ = create_leaf_exp(VAR_DT, $1);}
-    | INT   {$$ = create_leaf_exp(INTEGER, yytext);}
-    | FLOAT {$$ = create_leaf_exp(FLOATING, yytext);}
+    | INT   {$$ = create_leaf_exp(INTEGER, $1);}
+    | FLOAT {$$ = create_leaf_exp(FLOATING, $1);}
     | STRING    {$$ = create_leaf_exp(STRING_DT, $1);}
     | BOOL  {$$ = create_leaf_exp(BOOL_DT, $1);}
 ;
@@ -209,6 +209,7 @@ int main (int argc, char *argv[]) {
         
         Print_AST(AST);
         build_symbol_table(AST, S);
+        create_C_code(AST);
     }
 
         

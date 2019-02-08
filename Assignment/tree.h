@@ -17,16 +17,13 @@ typedef struct Cond Cond;
 struct Exp {
     enum operation op;
     union {
-        int ival; //Integer value
-        float fval; //Float value
-        char *sval; //String value
-        char *bval; //Binary valure
-        char *ident; //Identifier
+        char *literal; //Identifier
         struct { 
             Exp *left;
             Exp *right;
         } binary;
     }u;
+    
     enum type datatype;
 
 };

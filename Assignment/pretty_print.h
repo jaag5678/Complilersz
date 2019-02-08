@@ -1,4 +1,4 @@
-#include"symbol_table.h"
+#include"code_gen.h"
 
 //Print the entiree program again
 void Print_AST(Statements *AST);

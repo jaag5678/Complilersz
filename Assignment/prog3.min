@@ -8,7 +8,7 @@ var g : string;
 read(x);
 read(g);
 
-while(1) {
+while(true) {
     if(x == "var" || "int" || "float" || "string" || "boolean" || "while" || "if" || "else" || "print" || "read") {
         if(x == "float" || "int" || "boolean" || "string") {            
             print("tDatatype");

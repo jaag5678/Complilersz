@@ -1073,7 +1073,7 @@ case 34:
 YY_RULE_SETUP
 #line 107 "Scanner_Update.l"
 {if(g) printf("tINT(%s) \n", yytext);
-                                yylval.int_val = atoi(yytext);
+                                yylval.str = strdup(yytext);
                                 return INT;}
 	YY_BREAK
 case 35:
@@ -1087,7 +1087,7 @@ case 36:
 YY_RULE_SETUP
 #line 114 "Scanner_Update.l"
 {if(g) printf("tFLOAT(%s) \n", yytext);
-                                yylval.float_val = atof(yytext);
+                                yylval.str = strdup(yytext);
                                 return FLOAT;}
 	YY_BREAK
 case 37:

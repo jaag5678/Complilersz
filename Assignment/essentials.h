@@ -25,8 +25,7 @@ enum type {
     FLOATING, 
     STRING_DT, 
     BOOL_DT,
-    VAR_DT,
-    UNDEF
+    VAR_DT
 };
 
 //Enumerator for type of statements

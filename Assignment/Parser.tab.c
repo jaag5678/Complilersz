@@ -1532,7 +1532,7 @@ yyreduce:
 #line 122 "Parser.y" /* yacc.c:1646  */
     {   Exp *exp = malloc(sizeof(Exp));
                                     //exp -> datatype = VAR_DT;
-                                    exp -> u.ident = (yyvsp[-2].str);
+                                    exp -> u.literal = (yyvsp[-2].str);
                                     exp -> op = -1;
                                     (yyval.stmt) = create_statement(yylineno, READ_ST, NULL, exp, NULL, NULL);}
 #line 1539 "Parser.tab.c" /* yacc.c:1646  */
@@ -1708,13 +1708,13 @@ yyreduce:
 
   case 46:
 #line 167 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_leaf_exp(INTEGER, yytext);}
+    {(yyval.exp) = create_leaf_exp(INTEGER, (yyvsp[0].str));}
 #line 1713 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
   case 47:
 #line 168 "Parser.y" /* yacc.c:1646  */
-    {(yyval.exp) = create_leaf_exp(FLOATING, yytext);}
+    {(yyval.exp) = create_leaf_exp(FLOATING, (yyvsp[0].str));}
 #line 1719 "Parser.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2006,6 +2006,7 @@ int main (int argc, char *argv[]) {
         
         Print_AST(AST);
         build_symbol_table(AST, S);
+        create_C_code(AST);
     }
 
         
