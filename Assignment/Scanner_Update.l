@@ -111,7 +111,7 @@ int yyerror (char const *s) {
                                 printf("tERR_INT \n");
                                 return ERR;}
 
-0"."[0-9]*|[1-9]+"."[0-9]*  {if(g) printf("tFLOAT(%s) \n", yytext);
+0"."[0-9]*|[1-9]+[0-9]*"."[0-9]*  {if(g) printf("tFLOAT(%s) \n", yytext);
                                 yylval.float_val = atof(yytext);
                                 return FLOAT;}
 [0-9]*"."[0-9]*             {   yyerror("Invalid Floating point number ");

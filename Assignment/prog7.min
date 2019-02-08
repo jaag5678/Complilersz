@@ -9,3 +9,11 @@ b = a + b;
 c = c + d;
 
 c = c + c;
+
+var x : boolean;
+
+x =!!!!!x;
+
+while(x) {
+
+}

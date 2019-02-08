@@ -77,29 +77,79 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
             //I want to ensure that here every type is determined to one of the four datatypes mentioned in the spec of MiniLang
             //if(exp -> u.binary.left -> datatype == exp -> u.binary.right -> datatype) 
               //  exp -> datatype = exp -> u.binary.left -> datatype; 
-            int type_left = exp -> u.binary.left -> datatype;
-            int type_right = exp -> u.binary.right -> datatype;
+            
+            if(exp -> u.binary.left == NULL) {
+                int type = exp -> u.binary.right -> datatype;
+                int choice = exp -> op;
 
-            //Lets evaluate for Binary 
-            int choice = exp -> op;
-            switch(choice) {
-                case PLUS : case MINUS : case MULT: case DIVIDE: {
-                    if(type_left == INTEGER && type_right == INTEGER) 
-                        exp -> datatype = INTEGER;
-                    else if (type_left == FLOATING && type_right == FLOATING)
-                        exp -> datatype = FLOATING;
-                    else if ((type_left == FLOATING || type_left == INTEGER ) && (type_right == FLOATING || type_right == INTEGER))
-                        exp -> datatype = FLOATING;
-                    else if (exp -> op == PLUS && (type_left == STRING_DT && type_right == STRING_DT)) {
-                        printf("Im here \n");
-                        exp -> datatype = STRING_DT;
+                switch(choice) {
+                    case MINUS : {
+                        if(type == INTEGER || type == FLOATING)
+                            exp -> datatype = type;
+                        else {
+                            printf("Invalid operation for UNARY for given type of expression \n");
+                            exit(1);
+                        }
                     }
-                    else {
-                        printf("Incorrect type based operation \n");
-                        exit(1);
+                    break;
+                    case COMPL : {
+                        printf("Here \n");
+                        if(type == BOOL_DT) {
+                            //printf("%d \n", type);
+                            exp -> datatype = type;
+                            //printf("%d \n", exp -> datatype);
+                        }
+                        else {
+                            printf("Invalid type to do a comliment operation \n");
+                            exit(1);
+                        }
                     }
+                    break;
                 }
-
+            }
+            else  {
+                int type_left = exp -> u.binary.left -> datatype;
+                int type_right = exp -> u.binary.right -> datatype;
+                //Lets evaluate for Binary 
+                int choice = exp -> op;
+                switch(choice) {
+                    case PLUS : case MINUS : case MULT: case DIVIDE: {
+                        if(type_left == INTEGER && type_right == INTEGER) 
+                            exp -> datatype = INTEGER;
+                        else if (type_left == FLOATING && type_right == FLOATING)
+                            exp -> datatype = FLOATING;
+                        else if ((type_left == FLOATING || type_left == INTEGER ) && (type_right == FLOATING || type_right == INTEGER))
+                            exp -> datatype = FLOATING;
+                        else if (exp -> op == PLUS && (type_left == STRING_DT && type_right == STRING_DT)) {
+                            printf("Im here \n");
+                            exp -> datatype = STRING_DT;
+                        }
+                        else {
+                            printf("Incorrect type based operation \n");
+                            exit(1);
+                        }
+                    }
+                    break;
+                    case ANDAND: case OROR : {
+                        if(type_left == BOOL_DT && type_right == BOOL_DT)
+                            exp -> datatype = BOOL_DT;
+                        else {
+                            printf("Invalid Logical operation done :( \n");
+                            exit(1);
+                        }
+                    }
+                    break;
+                    case EQUAL : case NOT_EQUAL : case GT_EQ : case LT_EQ : case GRT : case LTN : {
+                        if(type_left == type_right) {
+                            exp -> datatype = BOOL_DT;
+                        }
+                        else {
+                            printf("Invalid relational operation \n ");
+                            exit(1);
+                        }
+                    }
+                    break;
+                }
             }
         }
     }
@@ -151,9 +201,11 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                     dec -> datatype = E -> datatype; 
                     if(E -> datatype == STRING_DT)
                         printf("AssGGG Dt \n");
+                    printf("H %d \n", dec -> exp -> datatype);
                     check_exp_symbols(S, dec -> exp);
-                    if(dec -> exp -> datatype == FLOATING && E -> datatype != FLOATING) {
-                        printf("Assignment error \n");
+                    printf("N %d \n", dec -> exp -> datatype);
+                    if(dec -> exp -> datatype != dec -> datatype) {
+                        printf("Assignment error: Conflicting types \n");
                         exit(1);
                     }
 
@@ -172,6 +224,12 @@ int build_symbol_table(Statements *AST, SymTab *S) {
 
         case WHILE_ST: {
             check_exp_symbols(S, stmt -> body_of_stmt.loop.exp);
+            //Now I need to ensure that the expression type is boolean otherwise I will quitt
+            if(stmt -> body_of_stmt.loop.exp -> datatype != BOOL_DT) {
+                printf("Invalid expreesion as a loop condition \n");
+                exit(1);
+            }
+
             //Now to create a new table and link it to the parent table
             SymTab *New = init(New, S);
             build_symbol_table(stmt -> body_of_stmt.loop.stmts, New);
