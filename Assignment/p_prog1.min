@@ -1,0 +1,12 @@
+var x : int;
+var d : int = 0;
+var n : int;
+read (n);
+while ((n>0)) {
+ 	var c : string;
+var gg : float;
+print (c);
+read (d);
+}
+var gg : int;
+print (d);

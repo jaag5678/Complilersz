@@ -1,0 +1,22 @@
+var a : int = 10;
+var b : float = 9.9;
+var x : boolean = true;
+if(true) {
+    var a : int = a;
+    print(a);
+    var b : float = b;
+    print (b);
+    print("\n");
+
+    var x : boolean = x;
+    print(x);
+    print("\n");
+    var c : float;
+    c = c;
+    print(c);
+    print ("\n");
+    if(true) {
+        var a : int = a;
+        print(a);
+    }
+}

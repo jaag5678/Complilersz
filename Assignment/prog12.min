@@ -1,0 +1,13 @@
+var a : int = 0;
+while(true) {
+    var a : int = a;
+}
+
+var b : int;
+var c : boolean;
+
+var z : string = "jdhg" + "shjfhg" + "dkhjgh";
+z = "Aks";
+
+var s : string;
+s = "Akshay" + "Gopalakrishnan" + "Student" + "COMP520";

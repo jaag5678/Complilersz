@@ -7,6 +7,7 @@
     extern char *yytext;
     extern int yylineno;
     extern int g;
+    int typecheck_tag = 0;
     int yylex();
 %}
 
@@ -14,6 +15,8 @@
 %code requires {
     #include"pretty_print.h"
     Statements *AST;
+    
+    
 }
 
 
@@ -176,9 +179,8 @@ int main (int argc, char *argv[]) {
     //printf("Table created\n");
 
     SymTab *S = init(S, NULL);
-    if(!(S -> parent_scope))
-        printf("Good \n");
 
+    printf("%d \n", argc);
     if(argc < 2) 
         printf("Invalid for of running lex / parser. Give type \n");    
     else if(!strcmp(argv[1], "scan")) {
@@ -194,7 +196,7 @@ int main (int argc, char *argv[]) {
         }
 
     }
-    else if(!strcmp(argv[1], "token")) {
+    else if(!strcmp(argv[1], "tokens")) {
         g = 1;
         while(yylex());
     }
@@ -203,11 +205,28 @@ int main (int argc, char *argv[]) {
         x = yyparse();
 
         if(!x)
-            printf("OK\n");
+           printf("OK\n");
         
+        //Print_AST(AST);
+        //build_symbol_table(AST, S);
+        //create_C_code(AST);
+    }
+    else if (!strcmp(argv[1], "pretty")) {
+        int x = yyparse();
         Print_AST(AST);
+    }
+    else if(!strcmp(argv[1], "symbol") || !strcmp(argv[1], "typecheck")) {
+        int x = yyparse();
+        if(!strcmp(argv[1], "typecheck"))
+            typecheck_tag = 1;
         build_symbol_table(AST, S);
-        create_C_code(AST);
+        if(!strcmp(argv[1], "typecheck"))
+            printf("OK\n");
+    }
+    else if(!strcmp(argv[1], "codegen")) {
+        int x = yyparse();
+        build_symbol_table(AST, S);
+        code_gen(AST, argv[2]);
     }
 
         

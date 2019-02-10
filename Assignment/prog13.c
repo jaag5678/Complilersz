@@ -1,4 +1,8 @@
 #include<stdio.h>
+#include<stdbool.h>
+#include<string.h>
+#include<stdlib.h>
+#include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdbool.h>
@@ -24,3 +28,33 @@ int *tmpi;
 float *tmpf;
 char **tmps;
 bool *tmpb;
+
+int main() {
+int a =10;
+float b=9.9;
+bool x=true;
+if (true) { 
+tmpi = &a;
+int a =*tmpi;
+printf("%d", a);
+tmpf = &b;
+float b=*tmpf;
+printf("%f", b);
+printf("%s", "\n");
+tmpb = &x;
+bool x=*tmpb;
+if (x)printf("true"); 
+else printf("false");
+printf("%s", "\n");
+float c=0.0;
+c=c;
+printf("%f", c);
+printf("%s", "\n");
+if (true) { 
+tmpi = &a;
+int a =*tmpi;
+printf("%d", a);
+}
+}
+return 0; 
+ } 

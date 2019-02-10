@@ -6,8 +6,7 @@ var b : int = 123;
 var c : float = 123;
 //var d : int = 123.5;
 
-c = 12.4;
-//b = 23.4;
+
 
 var z : int = -5;
 
@@ -15,5 +14,11 @@ var s : string = "gfjhkfdhgjh";
 var t : string;
 
 read(t);
-//print(s);
+print(s);
 read(s);
+
+var x : int = -9;
+
+if(s == t) {
+    print(s);
+}

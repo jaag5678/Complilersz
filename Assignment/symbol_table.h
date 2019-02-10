@@ -16,6 +16,7 @@ typedef struct SymTab {
     struct SymTab *parent_scope;
 }SymTab;
 
+extern int typecheck_tag;
 
 //Function to build the entire symbol table
 int build_symbol_table(Statements *AST, SymTab *S);

@@ -1,4 +1,8 @@
 #include<stdio.h>
+#include<stdbool.h>
+#include<string.h>
+#include<stdlib.h>
+#include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdbool.h>
@@ -20,7 +24,21 @@ int bool_inp() {
     return -1;
 }
 
-int *tmpi;
-float *tmpf;
-char **tmps;
-bool *tmpb;
+int main() {
+int a =0;
+scanf("%d", &a);
+printf("%d", a);
+int b =123;
+float c=123;
+int z =(-5);
+char *s="gfjhkfdhgjh";
+char *t="";
+scanf("%s", &t);
+printf("%s", s);
+scanf("%s", &s);
+int x =(-9);
+if (strcmp(s, t)==0) { 
+printf("%s", s);
+}
+return 0; 
+ } 

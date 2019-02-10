@@ -1,4 +1,8 @@
 #include<stdio.h>
+#include<stdbool.h>
+#include<string.h>
+#include<stdlib.h>
+#include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdbool.h>
@@ -24,3 +28,18 @@ int *tmpi;
 float *tmpf;
 char **tmps;
 bool *tmpb;
+
+int main() {
+int a =0;
+while (true) { 
+tmpi = &a;
+int a =*tmpi;
+}
+int b =0;
+bool c=false;
+char *z=str_add(str_add("jdhg", "shjfhg"), "dkhjgh");
+z="Aks";
+char *s="";
+s=str_add(str_add(str_add("Akshay", "Gopalakrishnan"), "Student"), "COMP520");
+return 0; 
+ } 

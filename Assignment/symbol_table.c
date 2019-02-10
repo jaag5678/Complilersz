@@ -54,13 +54,11 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                 Sym *E = sym_found(S, exp -> u.literal, 1);
                 //printf("Z \n");
                 if(!E) {
-                    printf("Identifier %s not defined \n", exp -> u.literal);
+                    fprintf(stderr, "Identifier %s not defined \n", exp -> u.literal);
                     exit(1);
                 }
                 int map = hash(exp -> u.literal);
-                printf("%s %d \n", exp -> u.literal, map);
-                if(E -> datatype == STRING_DT)
-                    printf("Ass Dt \n");
+                //printf("%s %d \n", exp -> u.literal, map);
                 exp -> datatype = E -> datatype;
             }
         }
@@ -78,20 +76,20 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                         if(type == INTEGER || type == FLOATING)
                             exp -> datatype = type;
                         else {
-                            printf("Invalid operation for UNARY for given type of expression \n");
+                            fprintf(stderr, "Invalid operation for UNARY for given type of expression \n");
                             exit(1);
                         }
                     }
                     break;
                     case COMPL : {
-                        printf("Here \n");
                         if(type == BOOL_DT) {
                             //printf("%d \n", type);
                             exp -> datatype = type;
                             //printf("%d \n", exp -> datatype);
                         }
                         else {
-                            printf("Invalid type to do a comliment operation \n");
+                            //printf();
+                            fprintf(stderr,"Error: Invalid type to do a comliment operation \n");
                             exit(1);
                         }
                     }
@@ -112,11 +110,10 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                         else if ((type_left == FLOATING || type_left == INTEGER ) && (type_right == FLOATING || type_right == INTEGER))
                             exp -> datatype = FLOATING;
                         else if (exp -> op == PLUS && (type_left == STRING_DT && type_right == STRING_DT)) {
-                            printf("Im here \n");
                             exp -> datatype = STRING_DT;
                         }
                         else {
-                            printf("Incorrect type based operation \n");
+                            fprintf(stderr, "Incorrect type based operation \n");
                             exit(1);
                         }
                     }
@@ -125,7 +122,7 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                         if(type_left == BOOL_DT && type_right == BOOL_DT)
                             exp -> datatype = BOOL_DT;
                         else {
-                            printf("Invalid Logical operation done :( \n");
+                            fprintf(stderr, "Invalid Logical operation done :( \n");
                             exit(1);
                         }
                     }
@@ -135,7 +132,7 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                             exp -> datatype = BOOL_DT;
                         }
                         else {
-                            printf("Invalid relational operation \n ");
+                            fprintf(stderr, "Invalid relational operation \n ");
                             exit(1);
                         }
                     }
@@ -172,7 +169,7 @@ int build_symbol_table(Statements *AST, SymTab *S) {
             switch(type) {
                 case BOOL_DT: case INTEGER: case FLOATING: case STRING_DT: {
                     if(sym_found(S, dec -> ident, 0)) {
-                        printf("Redefinition of Identifier %s that already exists\n", dec -> ident);
+                        fprintf(stderr, "Redefinition of Identifier %s that already exists\n", dec -> ident);
                         exit(1);
                     }
                     //printf("I'm here \n");
@@ -181,7 +178,8 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                     check_exp_symbols(S, dec -> exp);
                     //printf("Z \n");
 
-                    print_symbol(S, dec -> ident);
+                    if(!typecheck_tag)
+                        print_symbol(S, dec -> ident);
 
                     Sym *E = sym_found(S,dec -> ident, 1);
                     if(dec -> exp != NULL) {
@@ -189,7 +187,7 @@ int build_symbol_table(Statements *AST, SymTab *S) {
 
                         }
                         else if(dec -> exp -> datatype != E -> datatype) {
-                            printf("Assignment error: Conflicting types \n");
+                            fprintf(stderr, "Assignment error: Conflicting types \n");
                             exit(1);
                         }
                     }
@@ -198,13 +196,11 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                 default: {
                     Sym *E = sym_found(S,dec -> ident, 1);
                     if(!E) {
-                        printf("Identifier  %s not defined \n", dec -> ident);
+                        fprintf(stderr, "Identifier  %s not defined \n", dec -> ident);
                         exit(1);
                     }
                     //dec -> datatype = E -> datatype; 
                     dec -> datatype = VAR_DT;
-                    if(E -> datatype == STRING_DT)
-                        printf("AssGGG Dt \n");
                     //printf("H %d \n", dec -> exp -> datatype);
                     check_exp_symbols(S, dec -> exp);
                     //printf("N %d \n", dec -> exp -> datatype);
@@ -213,7 +209,7 @@ int build_symbol_table(Statements *AST, SymTab *S) {
 
                     }
                     else if(dec -> exp -> datatype != E -> datatype) {
-                        printf("Assignment error: Conflicting types \n");
+                        fprintf(stderr, "Assignment error: Conflicting types \n");
                         exit(1);
                     }
 
@@ -226,12 +222,12 @@ int build_symbol_table(Statements *AST, SymTab *S) {
         break;
 
         case PRINT_ST:  {
-            printf("In print eval of exp \n");
+            //printf("In print eval of exp \n");
             check_exp_symbols(S, stmt -> body_of_stmt.read_print);
         }
         break;
         case READ_ST: {
-            printf("In read eval of exp \n");
+            //printf("In read eval of exp \n");
             check_exp_symbols(S, stmt -> body_of_stmt.read_print);
         }
         break;
@@ -239,7 +235,7 @@ int build_symbol_table(Statements *AST, SymTab *S) {
             check_exp_symbols(S, stmt -> body_of_stmt.loop.exp);
             //Now I need to ensure that the expression type is boolean otherwise I will quitt
             if(stmt -> body_of_stmt.loop.exp -> datatype != BOOL_DT) {
-                printf("Invalid expreesion as a loop condition \n");
+                fprintf(stderr, "Invalid expreesion as a loop condition --> should be of type bool \n");
                 exit(1);
             }
 
