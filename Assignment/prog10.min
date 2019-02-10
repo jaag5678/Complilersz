@@ -1,0 +1,13 @@
+var a : string;
+read(a);
+print(a);
+
+var b : string = a;
+
+if((a > b) && (b > a)) {
+    print(a);
+}
+
+a = a + b +a + b + a;
+
+var x : float = 0.0;

@@ -120,9 +120,7 @@ dtype : D_INT   {$$ = INTEGER;}
 ;
 
 read : READ CO IDENT CC SCOLON  {   Exp *exp = malloc(sizeof(Exp));
-                                    //exp -> datatype = VAR_DT;
-                                    exp -> u.literal = $3;
-                                    exp -> op = -1;
+                                    exp = create_leaf_exp(VAR_DT, $3);
                                     $$ = create_statement(yylineno, READ_ST, NULL, exp, NULL, NULL);}
 ;       
 print : PRINT CO exp CC SCOLON  {$$ = create_statement(yylineno, PRINT_ST, NULL, $3, NULL, NULL);}

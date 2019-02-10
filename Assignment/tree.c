@@ -3,21 +3,6 @@
 
 Exp *create_leaf_exp(int type, char *text_to_val) {
     Exp *Leaf = (Exp*)malloc(sizeof(Exp));
-
-/*
-    if(type == INTEGER)
-        Leaf -> u.ival = atoi(text_to_val);
-    else if(type == FLOATING)
-        Leaf -> u.fval = atof(text_to_val);
-    else if (type == STRING_DT) 
-        Leaf -> u.sval = text_to_val;
-    else if (type == BOOL_DT) 
-        Leaf -> u.bval = text_to_val;   
-    else 
-        Leaf -> ident = text_to_val;
-    //if(type )
-    */
-   //printf("Text %s \n", text_to_val );
     Leaf -> u.literal = text_to_val;
     Leaf -> datatype = type; //IF it is an identifier, we must obtain the type ffrom the symbol table. Check this later
 

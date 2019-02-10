@@ -9,8 +9,32 @@ void create_C_exp(Exp *exp) {
         return;
     }
 
+    //I should compare here for things related to string oeprations
+
+    if(exp -> u.binary.left -> datatype == STRING_DT && exp -> u.binary.right -> datatype == STRING_DT) {
+        switch(exp -> op) {
+            case PLUS: {
+                printf("str_add(");
+                create_C_exp(exp -> u.binary.left);
+                printf(", ");
+                create_C_exp(exp -> u.binary.right);
+                printf(")");
+            }
+            break;
+            case EQUAL: case NOT_EQUAL: case GRT :case LTN: case GT_EQ : case LT_EQ : {
+                printf("strcmp(");
+                create_C_exp(exp -> u.binary.left);
+                printf(", ");
+                create_C_exp(exp -> u.binary.right);
+                printf(")");
+            }
+        }
+        return ;
+    }
     printf("(");
     create_C_exp(exp -> u.binary.left);
+
+
 
     switch(exp -> op) {
         case EQUAL: printf("==");
@@ -72,9 +96,21 @@ void create_C_code(Statements *AST) {
                 break;
                 default: printf("%s", dec -> ident);
             }
+            printf("=");
             if(dec -> exp != NULL) {
-                printf("=");
                 create_C_exp(dec -> exp);
+            }
+            else {
+                switch(type) {
+                    case INTEGER : printf("0");
+                    break;
+                    case FLOATING : printf("0.0");
+                    break;
+                    case STRING_DT : printf("\"\"");
+                    break;
+                    case BOOL_DT : printf("false");
+                    break;
+                }
             }
             printf(";\n");
         }
@@ -82,26 +118,43 @@ void create_C_code(Statements *AST) {
         
         case PRINT_ST: case READ_ST: {
             int type = stmt -> body_of_stmt.read_print -> datatype;
-            if(statement == PRINT_ST)
-                printf("printf(\"");
-            else
-                printf("scanf(\"");
-            switch(type) {
-                case INTEGER: printf("%%d");
-                break;
-                case FLOATING: printf("%%f");
-                break;
-                case STRING_DT: printf("%%s");
-                break;
-                case BOOL_DT: printf("%%d");
-                break; 
-            }
-            printf("\", ");
-            if(statement == READ_ST)
+            
+            if(type != BOOL_DT) {
+
+                if(statement == PRINT_ST)
+                    printf("printf(\"");
+                else
+                    printf("scanf(\"");
+                switch(type) {
+                    case INTEGER: printf("%%d\", ");
+                    break;
+                    case FLOATING: printf("%%f\", ");
+                    break;
+                    case STRING_DT: printf("%%s\", ");
+                    break;
+                }
+                if(statement == READ_ST)
                 printf("&");
-            //Print the expression here by calling print expression function
-            create_C_exp(stmt -> body_of_stmt.read_print);
-            printf(");\n");
+                //Print the expression here by calling print expression function
+                create_C_exp(stmt -> body_of_stmt.read_print);
+                printf(");\n");
+            }
+            else {
+                if(statement == PRINT_ST) {
+                    printf("if (");
+                    create_C_exp(stmt -> body_of_stmt.read_print);
+                    printf(")");
+                    printf("printf(\"true\"); \n");
+                    printf("else printf(\"false\");\n");
+                    
+                }
+                else {
+                    //Wrtie a fucntion to take input boolean value as "true" or "false"
+                    create_C_exp(stmt -> body_of_stmt.read_print); 
+                    printf("= bool_inp(); \n");
+                }
+            }
+            
         }
         break;
 
@@ -143,4 +196,12 @@ void create_C_code(Statements *AST) {
         }
         break;
     }
+}
+
+void code_gen(Statements *AST) {
+
+    //Later remember to put all this in a file 
+    printf("#include<stdio.h> \n #include<stdbool.h>\n");
+
+    create_C_code(AST);
 }

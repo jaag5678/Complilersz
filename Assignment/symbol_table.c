@@ -58,7 +58,7 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                     exit(1);
                 }
                 int map = hash(exp -> u.literal);
-                //printf("%s %d \n", exp -> u.ident, map);
+                printf("%s %d \n", exp -> u.literal, map);
                 if(E -> datatype == STRING_DT)
                     printf("Ass Dt \n");
                 exp -> datatype = E -> datatype;
@@ -180,7 +180,19 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                     //printf("I'm here b \n");
                     check_exp_symbols(S, dec -> exp);
                     //printf("Z \n");
+
                     print_symbol(S, dec -> ident);
+
+                    Sym *E = sym_found(S,dec -> ident, 1);
+                    if(dec -> exp != NULL) {
+                        if(E -> datatype == FLOATING  && (dec -> exp -> datatype == INTEGER || dec -> exp -> datatype == FLOATING)) {
+
+                        }
+                        else if(dec -> exp -> datatype != E -> datatype) {
+                            printf("Assignment error: Conflicting types \n");
+                            exit(1);
+                        }
+                    }
                 }
                 break;
                 default: {
@@ -193,10 +205,14 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                     dec -> datatype = VAR_DT;
                     if(E -> datatype == STRING_DT)
                         printf("AssGGG Dt \n");
-                    printf("H %d \n", dec -> exp -> datatype);
+                    //printf("H %d \n", dec -> exp -> datatype);
                     check_exp_symbols(S, dec -> exp);
-                    printf("N %d \n", dec -> exp -> datatype);
-                    if(dec -> exp -> datatype != E -> datatype) {
+                    //printf("N %d \n", dec -> exp -> datatype);
+
+                    if(E -> datatype == FLOATING  && (dec -> exp -> datatype == INTEGER || dec -> exp -> datatype == FLOATING)) {
+
+                    }
+                    else if(dec -> exp -> datatype != E -> datatype) {
                         printf("Assignment error: Conflicting types \n");
                         exit(1);
                     }
@@ -209,11 +225,16 @@ int build_symbol_table(Statements *AST, SymTab *S) {
         }
         break;
 
-        case PRINT_ST: case READ_ST: {
+        case PRINT_ST:  {
+            printf("In print eval of exp \n");
             check_exp_symbols(S, stmt -> body_of_stmt.read_print);
         }
         break;
-
+        case READ_ST: {
+            printf("In read eval of exp \n");
+            check_exp_symbols(S, stmt -> body_of_stmt.read_print);
+        }
+        break;
         case WHILE_ST: {
             check_exp_symbols(S, stmt -> body_of_stmt.loop.exp);
             //Now I need to ensure that the expression type is boolean otherwise I will quitt
