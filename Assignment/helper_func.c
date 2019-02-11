@@ -17,7 +17,8 @@ int bool_inp() {
         return 1;
     if(!strcmp(boolean, "false"))
         return 0;
-    return -1;
+    fprintf(stderr, "Invalid boolean input please choose between true or false");
+    exit(1);
 }
 
 int *tmpi;

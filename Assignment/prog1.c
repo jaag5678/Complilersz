@@ -24,6 +24,11 @@ int bool_inp() {
     return -1;
 }
 
+int *tmpi;
+float *tmpf;
+char **tmps;
+bool *tmpb;
+
 int main() {
 int x =0;
 int d =0;

@@ -76,7 +76,7 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                         if(type == INTEGER || type == FLOATING)
                             exp -> datatype = type;
                         else {
-                            fprintf(stderr, "Invalid operation for UNARY for given type of expression \n");
+                            fprintf(stderr, "Error: Invalid operation for UNARY for given type of expression \n");
                             exit(1);
                         }
                     }
@@ -89,7 +89,7 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                         }
                         else {
                             //printf();
-                            fprintf(stderr,"Error: Invalid type to do a comliment operation \n");
+                            fprintf(stderr,"Error: Invalid type to do a compliment operation \n");
                             exit(1);
                         }
                     }
@@ -113,7 +113,7 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                             exp -> datatype = STRING_DT;
                         }
                         else {
-                            fprintf(stderr, "Incorrect type based operation \n");
+                            fprintf(stderr, "Error: Incorrect type based operation \n");
                             exit(1);
                         }
                     }
@@ -122,7 +122,7 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                         if(type_left == BOOL_DT && type_right == BOOL_DT)
                             exp -> datatype = BOOL_DT;
                         else {
-                            fprintf(stderr, "Invalid Logical operation done :( \n");
+                            fprintf(stderr, "Error: Invalid Logical operation done :( \n");
                             exit(1);
                         }
                     }
@@ -132,7 +132,7 @@ void check_exp_symbols(SymTab *S, Exp *exp) {
                             exp -> datatype = BOOL_DT;
                         }
                         else {
-                            fprintf(stderr, "Invalid relational operation \n ");
+                            fprintf(stderr, "Error: Invalid relational operation \n ");
                             exit(1);
                         }
                     }
@@ -253,6 +253,8 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                 switch(c) {
                     case IF_ST : case ELSE_IF_ST: {
                         check_exp_symbols(S, stmt -> body_of_stmt.cond.exp);
+                        if(stmt -> body_of_stmt.cond.exp -> datatype != BOOL_DT)
+                            fprintf(stderr, "invalid expression as a loop condition --> should be of type bool \n");
                     }
                     break;
                 }
@@ -260,6 +262,7 @@ int build_symbol_table(Statements *AST, SymTab *S) {
                 SymTab *New = (SymTab *)malloc(sizeof(SymTab));
                 New = init(New, S);
                 build_symbol_table(stmt -> body_of_stmt.cond.stmts, New);
+
 
                 if(stmt -> body_of_stmt.cond.op_else_if != NULL) {
                     stmt = stmt -> body_of_stmt.cond.op_else_if;

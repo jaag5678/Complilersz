@@ -11,3 +11,8 @@ z = "Aks";
 
 var s : string;
 s = "Akshay" + "Gopalakrishnan" + "Student" + "COMP520";
+
+if(-c) {
+    read(c);
+    print (c);
+}

@@ -45,6 +45,8 @@ void create_C_exp(Exp *exp, FILE *fp, int tag) {
         return;
     }
 
+   
+
     //I should compare here for things related to string oeprations
     if(exp -> u.binary.left != NULL) {
         if(exp -> u.binary.left -> datatype == STRING_DT && exp -> u.binary.right -> datatype == STRING_DT) {
@@ -112,6 +114,9 @@ void create_C_exp(Exp *exp, FILE *fp, int tag) {
         case MULT: fprintf(fp, "*");
         break;
         case DIVIDE: fprintf(fp, "/");
+        break;
+        case COMPL: fprintf(fp, "!");
+        break;
     }
     create_C_exp(exp -> u.binary.right, fp, tag);
     fprintf(fp, ")");
@@ -279,8 +284,6 @@ void code_gen(Statements *AST, char *filename) {
     FILE *c_file;
 
     c_file = fopen(filename, "w+");
-
-    fprintf(c_file,"#include<stdio.h>\n#include<stdbool.h>\n#include<string.h>\n#include<stdlib.h>\n");
     
     //Need to add helper functions 
 

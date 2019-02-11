@@ -1,8 +1,4 @@
 #include<stdio.h>
-#include<stdbool.h>
-#include<string.h>
-#include<stdlib.h>
-#include<stdio.h>
 #include<string.h>
 #include<stdlib.h>
 #include<stdbool.h>
@@ -21,7 +17,8 @@ int bool_inp() {
         return 1;
     if(!strcmp(boolean, "false"))
         return 0;
-    return -1;
+    fprintf(stderr, "Invalid boolean input please choose between true or false");
+    exit(1);
 }
 
 int *tmpi;
@@ -41,5 +38,10 @@ char *z=str_add(str_add("jdhg", "shjfhg"), "dkhjgh");
 z="Aks";
 char *s="";
 s=str_add(str_add(str_add("Akshay", "Gopalakrishnan"), "Student"), "COMP520");
+if ((!c)) { 
+c= bool_inp(); 
+if (c)printf("true"); 
+else printf("false");
+}
 return 0; 
  } 
